@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Peter Paul Ungab — Resume</title>
+  <!--
+    Source of assets/resume.pdf. Edit this file, then run:  node resume/build-resume.mjs
+    (renders this page to a real, text-based PDF with headless Chrome).
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    @page { size: Letter; margin: 0.4in 0.5in; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Inter", "Segoe UI", Arial, sans-serif;
+      font-size: 9.5pt;
+      line-height: 1.32;
+      color: #111827;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    a { color: #0369a1; text-decoration: none; }
+    h1, h2, h3, p, ul { margin: 0; }
+    ul { padding-left: 13px; }
+    li { margin: 0.5px 0; }
+    li::marker { color: #64748b; }
+
+    /* Header */
+    .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; padding-bottom: 7px; border-bottom: 2px solid #0ea5e9; }
+    .name { font-size: 21pt; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+    .role { margin-top: 2px; font-size: 10.6pt; font-weight: 600; color: #0369a1; }
+    .contact { text-align: right; font-size: 9pt; color: #374151; line-height: 1.5; }
+    .contact span { white-space: nowrap; }
+
+    /* Sections */
+    section { margin-top: 7px; }
+    h2 { font-size: 8.8pt; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #0369a1; padding-bottom: 2px; margin-bottom: 3px; border-bottom: 1px solid #e5e7eb; }
+    .summary { color: #1f2937; }
+
+    .skills { display: grid; grid-template-columns: max-content 1fr; column-gap: 12px; row-gap: 0; }
+    .skills dt { font-weight: 600; color: #374151; }
+    .skills dd { margin: 0; }
+
+    .item { margin-top: 4px; break-inside: avoid; }
+    .item:first-of-type { margin-top: 0; }
+    .item__head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+    .item__title { font-weight: 700; font-size: 10.1pt; }
+    .item__title .tech { font-weight: 500; color: #4b5563; }
+    .item__meta { font-size: 8.8pt; color: #4b5563; white-space: nowrap; }
+    .item__meta a + a::before { content: " · "; color: #9ca3af; }
+    .item ul { margin-top: 0; }
+
+    .muted { color: #4b5563; }
+  </style>
+</head>
+<body>
+  <header class="head">
+    <div>
+      <h1 class="name">Peter Paul Ungab</h1>
+      <p class="role">Software Engineer · Full-Stack Developer</p>
+    </div>
+    <div class="contact">
+      <span>Digos City, Davao del Sur, Philippines</span><br />
+      <a href="mailto:peterpaulungab00@gmail.com">peterpaulungab00@gmail.com</a><br />
+      <a href="https://github.com/PeterUngab34">github.com/PeterUngab34</a> · <a href="https://peterungab34.github.io/">peterungab34.github.io</a>
+    </div>
+  </header>
+
+  <section>
+    <h2>Summary</h2>
+    <p class="summary">
+      Computer Engineering student who designs, builds, tests, and ships full-stack software end to end: React/Node.js/MongoDB web apps,
+      a Java/MySQL desktop system, and vanilla-JavaScript tools — all open source, deployed, and backed by 149 automated tests.
+      Seeking internships and junior software engineering roles where I can write clean, maintainable code and keep learning.
+    </p>
+  </section>
+
+  <section>
+    <h2>Education</h2>
+    <div class="item">
+      <div class="item__head">
+        <p class="item__title">Bachelor of Science in Computer Engineering <span class="tech">· Cor Jesu College, Digos City</span></p>
+        <p class="item__meta">Expected graduation: 2028</p>
+      </div>
+      <p class="muted">Relevant coursework: Programming, Data Structures and Algorithms, Object-Oriented Programming, Database Systems, Web Development, Computer Networks, Software Engineering, Digital Logic, Computer Architecture.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Technical Skills</h2>
+    <dl class="skills">
+      <dt>Languages</dt><dd>JavaScript, Python, Java, C++, C, SQL</dd>
+      <dt>Front-End</dt><dd>HTML5, CSS3, React, Vite, Bootstrap, Tailwind CSS, responsive &amp; accessible UI</dd>
+      <dt>Back-End</dt><dd>Node.js, Express.js, Socket.IO, REST APIs, JWT authentication, input validation, rate limiting</dd>
+      <dt>Databases</dt><dd>MySQL, PostgreSQL, MongoDB (Mongoose), SQLite, relational schema design, JDBC</dd>
+      <dt>Tools</dt><dd>Git, GitHub, GitHub Actions (CI/CD), VS Code, Postman, Maven, JUnit 5, Node test runner</dd>
+    </dl>
+  </section>
+
+  <section>
+    <h2>Projects</h2>
+
+    <div class="item">
+      <div class="item__head">
+        <p class="item__title">Lumora — E-Commerce Website <span class="tech">· React, Node.js, Express, MongoDB, JWT</span></p>
+        <p class="item__meta"><a href="https://peterungab34.github.io/ecommerce/">Live demo</a><a href="https://github.com/PeterUngab34/ecommerce">Source</a></p>
+      </div>
+      <ul>
+        <li>Full-stack online store: product catalog with search, category/price filters, sorting and pagination; persistent cart; validated checkout; order history.</li>
+        <li>REST API with Express and Mongoose where order totals and stock are computed server-side, so client-supplied prices are never trusted.</li>
+        <li>JWT authentication with bcrypt password hashing, Helmet and rate limiting; 25 automated API tests; automated deployment with GitHub Actions.</li>
+      </ul>
+    </div>
+
+    <div class="item">
+      <div class="item__head">
+        <p class="item__title">Parley — Real-Time Chat Application <span class="tech">· React, Node.js, Express, Socket.IO, MongoDB</span></p>
+        <p class="item__meta"><a href="https://peterungab34.github.io/chat-app/">Live demo</a><a href="https://github.com/PeterUngab34/chat-app">Source</a></p>
+      </div>
+      <ul>
+        <li>Real-time messaging over WebSockets with chat rooms, online presence, typing indicators, unread badges, and paginated message history in MongoDB.</li>
+        <li>Server-side validation and per-socket rate limiting; 22 integration tests using real socket clients, run in CI on every push.</li>
+      </ul>
+    </div>
+
+    <div class="item">
+      <div class="item__head">
+        <p class="item__title">Student Management System <span class="tech">· Java, Swing, JDBC, MySQL, JUnit 5</span></p>
+        <p class="item__meta"><a href="https://github.com/PeterUngab34/student-management-system/releases/latest">Download</a><a href="https://github.com/PeterUngab34/student-management-system">Source</a></p>
+      </div>
+      <ul>
+        <li>Desktop application for student records, courses, enrollments and grades on a normalized MySQL schema (foreign keys, constraints, indexes) with an embedded H2 fallback.</li>
+        <li>Live search, filter and sort with parameterized JDBC queries; unit-weighted GPA on the Philippine 1.00–5.00 scale; CSV export; 73 unit tests; Maven build with CI.</li>
+      </ul>
+    </div>
+
+    <div class="item">
+      <div class="item__head">
+        <p class="item__title">TaskFlow — Task Manager <span class="tech">· HTML, CSS, JavaScript</span></p>
+        <p class="item__meta"><a href="https://peterungab34.github.io/task-manager/">Live demo</a><a href="https://github.com/PeterUngab34/task-manager">Source</a></p>
+      </div>
+      <ul>
+        <li>Task CRUD with undo, priorities, due dates, filters, search and sort, keyboard shortcuts, light/dark themes and LocalStorage persistence; 29 automated browser tests.</li>
+      </ul>
+    </div>
+
+    <div class="item">
+      <div class="item__head">
+        <p class="item__title">Personal Portfolio Website <span class="tech">· HTML, CSS, JavaScript</span></p>
+        <p class="item__meta"><a href="https://peterungab34.github.io/">peterungab34.github.io</a></p>
+      </div>
+      <ul>
+        <li>Data-driven, accessible, SEO-optimized portfolio with light/dark themes, a live GitHub repositories integration, and a working contact form.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Experience</h2>
+    <div class="item">
+      <div class="item__head">
+        <p class="item__title">Independent Software Developer <span class="tech">· Personal open-source projects</span></p>
+        <p class="item__meta">2025 – Present</p>
+      </div>
+      <ul>
+        <li>Designed, built, tested and deployed the five applications above from planning to production; managed source with Git/GitHub and automated tests and deployments with GitHub Actions.</li>
+      </ul>
+    </div>
+    <div class="item">
+      <div class="item__head">
+        <p class="item__title">Academic Software Projects <span class="tech">· Cor Jesu College</span></p>
+        <p class="item__meta">2024 – Present</p>
+      </div>
+      <ul>
+        <li>Course projects in Java, C++, Python and SQL applying object-oriented design, data structures and relational database design; collaborated in teams using version control.</li>
+      </ul>
+    </div>
+  </section>
+</body>
+</html>
