@@ -114,7 +114,8 @@ const PORTFOLIO = {
   /* ---------------- Featured projects ----------------
      Replace these examples with your real projects.
      Set github/demo to "" to hide a button. featured: true = wide card.
-     demoLabel: optional text for the demo button (e.g. "Download App"). */
+     demoLabel: optional text for the demo button (e.g. "Download App").
+     download: optional link for an extra "Download" button (e.g. a release page). */
   projects: [
     {
       title: "Task Management Application",
@@ -134,7 +135,7 @@ const PORTFOLIO = {
     },
     {
       title: "E-Commerce Website",
-      image: "assets/projects/ecommerce.png",
+      image: "assets/projects/ecommerce.webp",
       description:
         "Lumora — a modern online store with product browsing, a persistent shopping cart, checkout, and order history, backed by a REST API.",
       tech: ["React", "Node.js", "Express", "MongoDB", "JWT"],
@@ -164,9 +165,9 @@ const PORTFOLIO = {
     },
     {
       title: "Student Management System",
-      image: "assets/projects/student-system.png",
+      image: "assets/projects/student-system.webp",
       description:
-        "A desktop application for managing student records, courses, enrollments, and grades on a normalized MySQL database.",
+        "A desktop application for managing student records, courses, enrollments, and grades on a normalized MySQL database — with a web edition that runs the same SQL schema in your browser.",
       tech: ["Java", "Swing", "JDBC", "MySQL", "SQL", "JUnit 5"],
       features: [
         "Full CRUD for student records with per-field validation",
@@ -175,12 +176,12 @@ const PORTFOLIO = {
         "Enrollment and grade tracking with unit-weighted GPA, covered by 73 tests",
       ],
       github: "https://github.com/PeterUngab34/student-management-system",
-      demo: "https://github.com/PeterUngab34/student-management-system/releases/latest",
-      demoLabel: "Download App",
+      demo: "https://peterungab34.github.io/student-management-system/",
+      download: "https://github.com/PeterUngab34/student-management-system/releases/latest",
     },
     {
       title: "Personal Portfolio Website",
-      image: "assets/projects/portfolio.png",
+      image: "assets/projects/portfolio.webp",
       description:
         "A responsive developer portfolio showcasing my projects, skills, education, and experience.",
       tech: ["HTML", "CSS", "JavaScript"],

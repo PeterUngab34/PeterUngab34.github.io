@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page not found | Peter Paul Ungab</title>
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#070b13" />
+
+  <!-- Absolute paths: GitHub Pages serves this file for any missing URL, at any depth -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+  <link rel="stylesheet" href="/css/styles.css" />
+
+  <style>
+    .notfound { justify-content: center; text-align: center; padding-bottom: 64px; }
+    .notfound__inner { position: relative; max-width: 620px; }
+    .notfound__code {
+      font-family: var(--font-display);
+      font-size: clamp(6rem, 22vw, 11rem);
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+    .notfound__eyebrow { justify-content: center; margin-bottom: 8px; }
+    .notfound__eyebrow::before { display: none; }
+    .notfound__title { margin-top: 10px; font-size: clamp(1.5rem, 3.4vw, 2.1rem); }
+    .notfound__text { margin: 14px auto 0; max-width: 46ch; color: var(--text-muted); }
+    .notfound__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 32px; }
+  </style>
+
+  <!-- Apply saved theme before paint to avoid a flash -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("theme");
+        if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+
+<body>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Primary">
+      <a href="/" class="nav__logo">
+        <span class="nav__logo-mark" aria-hidden="true">PU</span>
+        <span class="nav__logo-text">Peter Paul Ungab</span>
+      </a>
+    </nav>
+  </header>
+
+  <main class="hero notfound" id="main">
+    <div class="hero__bg" aria-hidden="true">
+      <div class="hero__mesh"></div>
+      <div class="hero__grid"></div>
+    </div>
+
+    <div class="container notfound__inner">
+      <p class="section__eyebrow notfound__eyebrow">Error 404</p>
+      <p class="notfound__code gradient-text" aria-hidden="true">404</p>
+      <h1 class="notfound__title">This page doesn't exist</h1>
+      <p class="notfound__text">The link may be broken or the page may have moved. Everything I've built is still one click away.</p>
+      <div class="notfound__actions">
+        <a href="/" class="btn btn--primary">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+          Back to home
+        </a>
+        <a href="/#projects" class="btn btn--outline">View my projects</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

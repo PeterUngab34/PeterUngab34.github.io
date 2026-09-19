@@ -1622,7 +1622,7 @@ a.info-item__value:hover { color: var(--accent-text); }
   .skill { padding: 9px 12px 9px 10px; font-size: 0.86rem; }
   .services-grid { grid-template-columns: 1fr; }
   .project__body, .project--featured .project__body { padding: 22px; }
-  .project__actions .btn { flex: 1; }
+  .project__actions .btn { flex: 1 1 auto; }
   .timeline { padding-left: 34px; }
   .timeline::before { left: 8px; }
   .timeline__dot { left: -34px; width: 20px; height: 20px; top: 24px; }

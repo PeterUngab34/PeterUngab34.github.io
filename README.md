@@ -19,17 +19,21 @@ Built with semantic HTML, modern CSS, and vanilla JavaScript — no build step r
 ```
 MyPortfolio/
 ├── index.html                  # Page structure + SEO meta tags
+├── 404.html                    # Branded "page not found" (served by GitHub Pages for bad URLs)
 ├── css/styles.css              # All styles (design tokens at the top)
 ├── js/data.js                  # ← YOUR CONTENT: edit this file
 ├── js/main.js                  # Rendering + interactions
+├── resume/                     # Resume source (resume.html) + PDF build script
 ├── assets/
 │   ├── favicon.svg
-│   ├── resume.pdf              # ← replace with your resume (keep the name)
+│   ├── apple-touch-icon.png    # 180×180 home-screen icon
+│   ├── resume.pdf              # built from resume/ with `node resume/build-resume.mjs`
 │   ├── images/
 │   │   ├── profile-placeholder.svg   # ← replace with your photo
 │   │   └── og-image.png              # social share preview (1200×630)
 │   └── projects/               # ← project screenshots
 ├── robots.txt
+├── sitemap.xml
 └── README.md
 ```
 
@@ -42,8 +46,9 @@ MyPortfolio/
 3. **Photo** – add `assets/images/profile.jpg` (portrait, ~600×700) and set `profile.photo` to that path.
 4. **Resume** – replace `assets/resume.pdf` with your real resume, keeping the same file name.
 5. **Projects** – edit the `projects` array. Add screenshots (16:10, e.g. 1280×800) to `assets/projects/`
-   and point `image` to them. Set `github` or `demo` to `""` to hide that button; `featured: true`
-   makes a project span the full width.
+   and point `image` to them (PNG for flat UI, WebP for photo- or gradient-heavy shots — whichever
+   is smaller). Set `github` or `demo` to `""` to hide that button; add `download` for an extra
+   "Download" button; `featured: true` makes a project span the full width.
 6. **Skills, experience, education, certifications, services** – edit the matching arrays.
    Setting `certifications: []` hides that section entirely. Skills also feed the scrolling
    technology ticker under the hero.

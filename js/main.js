@@ -238,6 +238,11 @@
                   ? `<a class="btn btn--primary btn--sm" href="${esc(p.demo)}" target="_blank" rel="noopener noreferrer">${icon(p.demoLabel ? "download" : "external")} ${esc(p.demoLabel || "Live Demo")}</a>`
                   : ""
               }
+              ${
+                p.download
+                  ? `<a class="btn btn--outline btn--sm" href="${esc(p.download)}" target="_blank" rel="noopener noreferrer">${icon("download")} Download</a>`
+                  : ""
+              }
             </div>
           </div>
         </article>`;
@@ -322,6 +327,15 @@
         </article>`
       )
       .join("");
+  }
+
+  // Keep the "01 · About" eyebrow numbers sequential when a section is hidden
+  function numberSections() {
+    let n = 0;
+    $$("main > section:not([hidden]) .section__eyebrow").forEach((el) => {
+      n += 1;
+      el.textContent = el.textContent.replace(/^\d+/, String(n).padStart(2, "0"));
+    });
   }
 
   function renderServices() {
@@ -702,6 +716,7 @@
   renderEducation();
   renderCertifications();
   renderServices();
+  numberSections();
 
   initTheme();
   initNav();
