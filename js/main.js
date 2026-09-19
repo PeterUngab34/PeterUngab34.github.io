@@ -80,6 +80,12 @@
       if (value) el.setAttribute("alt", value);
     });
     document.title = `${profile.name} | Software Engineer Portfolio`;
+    // "Rev." is the month this copy of the page was last deployed
+    const modified = new Date(document.lastModified);
+    if (!Number.isNaN(modified.getTime())) {
+      const rev = `${modified.getFullYear()}.${String(modified.getMonth() + 1).padStart(2, "0")}`;
+      $$("[data-rev]").forEach((el) => (el.textContent = rev));
+    }
     const year = $("#year");
     if (year) year.textContent = new Date().getFullYear();
   }
@@ -99,6 +105,19 @@
       )
       .join("");
     $$("[data-socials]").forEach((ul) => (ul.innerHTML = html));
+  }
+
+  /* ---------------- Hero "At a glance" table ---------------- */
+  function renderGlance() {
+    const el = $("[data-glance]");
+    if (!el || !Array.isArray(data.glance)) return;
+    const rows = data.glance.map((r) => `<div><dt>${esc(r.label)}</dt><dd>${esc(r.value)}</dd></div>`);
+    if (profile.availabilityShort) {
+      rows.push(
+        `<div><dt>Status</dt><dd class="spec__status"><span class="status-dot" aria-hidden="true"></span>${esc(profile.availabilityShort)}</dd></div>`
+      );
+    }
+    el.innerHTML = rows.join("");
   }
 
   /* ---------------- Hero stats (count-up) ---------------- */
@@ -169,13 +188,10 @@
     el.innerHTML = data.skills
       .map(
         (group) => `
-        <section class="skill-group reveal" aria-label="${esc(group.category)}">
-          <header class="skill-group__head">
-            <span class="icon-box">${icon(group.icon)}</span>
-            <div>
-              <h3>${esc(group.category)}</h3>
-              <span class="skill-group__count">${group.items.length} ${group.items.length === 1 ? "item" : "items"}</span>
-            </div>
+        <section class="skill-row reveal" aria-label="${esc(group.category)}">
+          <header class="skill-row__head">
+            <h3>${esc(group.category)}</h3>
+            <span class="skill-row__count" aria-hidden="true">${String(group.items.length).padStart(2, "0")}</span>
           </header>
           <ul class="skill-list">
             ${group.items
@@ -188,33 +204,12 @@
     guardIcons(el);
   }
 
-  // Decorative technology ticker under the hero (unique skills, looped twice for a seamless loop)
-  function renderTicker() {
-    const el = $("[data-ticker]");
-    if (!el) return;
-    const seen = new Set();
-    const items = [];
-    data.skills.forEach((g) =>
-      g.items.forEach((item) => {
-        if (seen.has(item.name)) return;
-        seen.add(item.name);
-        items.push(`<span class="ticker__item">${skillIcon(item)}${esc(item.name)}</span>`);
-      })
-    );
-    if (!items.length) {
-      el.closest(".ticker").hidden = true;
-      return;
-    }
-    const half = items.join("");
-    el.innerHTML = half + half;
-    guardIcons(el);
-  }
 
   function renderProjects() {
     const el = $("[data-projects]");
     if (!el) return;
     el.innerHTML = data.projects
-      .map((project) => {
+      .map((project, i) => {
         const p = {
           ...project,
           github: safeUrl(project.github),
@@ -222,41 +217,46 @@
           download: safeUrl(project.download),
         };
         const link = p.demo || p.github;
-        const viewLabel = p.demo ? p.demoLabel || "View project" : "View code";
+        const viewLabel = p.demo ? p.demoLabel || "Open live demo" : "View source";
         const media = `<img src="${esc(safeUrl(p.image))}" alt="Screenshot of ${esc(p.title)}" loading="lazy" decoding="async" width="1280" height="800" />`;
-        const view = `<span class="project__view" aria-hidden="true"><span>${esc(viewLabel)} ${icon(
-          p.demo && p.demoLabel ? "download" : "arrow"
-        )}</span></span>`;
+        const specs = [
+          ["Type", esc(p.type || "")],
+          [
+            "Stack",
+            `<ul class="chip-list" aria-label="Technologies used">${p.tech.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>`,
+          ],
+          ["Tests", esc(p.tests || "")],
+        ].filter(([, value]) => value);
         return `
-        <article class="card project reveal${p.featured ? " project--featured" : ""}">
-          ${
-            link
-              ? `<a class="project__media" href="${esc(link)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(viewLabel)}: ${esc(p.title)}" tabindex="-1">${media}${view}</a>`
-              : `<div class="project__media">${media}</div>`
-          }
+        <article class="project reveal${p.featured ? " project--featured" : ""}">
+          <figure class="figure project__figure">
+            ${
+              link
+                ? `<a class="figure__frame project__media" href="${esc(link)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(viewLabel)}: ${esc(p.title)}" tabindex="-1">${media}</a>`
+                : `<div class="figure__frame project__media">${media}</div>`
+            }
+            <figcaption class="figure__caption"><span>Fig. ${String(i + 1).padStart(2, "0")}</span> ${esc(p.title)}</figcaption>
+          </figure>
           <div class="project__body">
-            ${p.featured ? '<p class="project__kicker">Featured project</p>' : ""}
             <h3 class="project__title">${esc(p.title)}</h3>
             <p class="project__desc">${esc(p.description)}</p>
+            <dl class="project__specs">
+              ${specs.map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`).join("")}
+            </dl>
             ${
               p.features && p.features.length
-                ? `<ul class="project__features">${p.features
-                    .map((f) => `<li>${icon("check")}<span>${esc(f)}</span></li>`)
-                    .join("")}</ul>`
+                ? `<ul class="project__features">${p.features.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>`
                 : ""
             }
-            <ul class="chip-list" aria-label="Technologies used">
-              ${p.tech.map((t) => `<li class="chip">${esc(t)}</li>`).join("")}
-            </ul>
             <div class="project__actions">
               ${
-                p.github
-                  ? `<a class="btn btn--outline btn--sm" href="${esc(p.github)}" target="_blank" rel="noopener noreferrer">${BRAND.github} GitHub Repo</a>`
+                p.demo
+                  ? `<a class="btn btn--primary btn--sm" href="${esc(p.demo)}" target="_blank" rel="noopener noreferrer">${esc(p.demoLabel || "Live demo")} ${icon(p.demoLabel ? "download" : "arrow")}</a>`
                   : ""
               }
               ${
-                p.demo
-                  ? `<a class="btn btn--primary btn--sm" href="${esc(p.demo)}" target="_blank" rel="noopener noreferrer">${icon(p.demoLabel ? "download" : "external")} ${esc(p.demoLabel || "Live Demo")}</a>`
+                p.github
+                  ? `<a class="btn btn--outline btn--sm" href="${esc(p.github)}" target="_blank" rel="noopener noreferrer">${BRAND.github} Source</a>`
                   : ""
               }
               ${
@@ -278,15 +278,13 @@
       .map(
         (x) => `
         <li class="timeline__item reveal">
-          <span class="timeline__dot" aria-hidden="true"></span>
-          <article class="card timeline__card">
-            <header class="timeline__head">
-              <div>
-                <h3 class="timeline__role">${esc(x.role)}</h3>
-                <p class="timeline__org">${esc(x.org)}${x.type ? ` <span class="pill">${esc(x.type)}</span>` : ""}</p>
-              </div>
-              <p class="timeline__period">${icon("calendar")}${esc(x.period)}</p>
-            </header>
+          <div class="timeline__meta">
+            <p class="timeline__period">${esc(x.period)}</p>
+            ${x.type ? `<p class="timeline__type">${esc(x.type)}</p>` : ""}
+          </div>
+          <article class="timeline__main">
+            <h3 class="timeline__role">${esc(x.role)}</h3>
+            <p class="timeline__org">${esc(x.org)}</p>
             <ul class="timeline__points">
               ${x.points.map((pt) => `<li>${esc(pt)}</li>`).join("")}
             </ul>
@@ -302,20 +300,17 @@
     el.innerHTML = data.education
       .map(
         (e) => `
-        <article class="card edu reveal">
+        <article class="edu reveal">
           <div class="edu__main">
-            <span class="icon-box icon-box--lg">${icon("cap")}</span>
-            <div>
-              <p class="edu__degree">${esc(e.degree)}</p>
-              <h3 class="edu__program">${esc(e.program)}</h3>
-              <p class="edu__school">${esc(e.school)}</p>
-              <p class="edu__period">${icon("calendar")}${esc(e.period)}</p>
-            </div>
+            <p class="edu__degree">${esc(e.degree)}</p>
+            <h3 class="edu__program">${esc(e.program)}</h3>
+            <p class="edu__school">${esc(e.school)}</p>
+            <p class="edu__period">${esc(e.period)}</p>
           </div>
           ${
             e.coursework && e.coursework.length
               ? `<div class="edu__courses">
-                  <h4>Relevant Coursework</h4>
+                  <h4>Relevant coursework</h4>
                   <ul class="tag-list">${e.coursework.map((c) => `<li class="tag">${esc(c)}</li>`).join("")}</ul>
                 </div>`
               : ""
@@ -335,11 +330,10 @@
     el.innerHTML = data.certifications
       .map(
         (c) => `
-        <article class="card cert reveal">
-          <span class="icon-box">${icon("award")}</span>
+        <article class="cert reveal">
+          <p class="cert__date">${esc(c.date)}</p>
           <h3 class="cert__name">${esc(c.name)}</h3>
           <p class="cert__org">${esc(c.org)}</p>
-          <p class="cert__date">${icon("calendar")}${esc(c.date)}</p>
           ${
             safeUrl(c.url)
               ? `<a class="link-arrow" href="${esc(safeUrl(c.url))}" target="_blank" rel="noopener noreferrer">View Certificate ${icon("external")}</a>`
@@ -365,9 +359,8 @@
     el.innerHTML = data.services
       .map(
         (s, i) => `
-        <article class="card service reveal">
+        <article class="service reveal">
           <span class="service__index" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
-          <span class="icon-box icon-box--lg">${icon(s.icon)}</span>
           <h3>${esc(s.title)}</h3>
           <p>${esc(s.text)}</p>
         </article>`
@@ -396,11 +389,11 @@
       grid.innerHTML = repos
         .map(
           (r) => `
-          <a class="card repo" href="${esc(safeUrl(r.html_url))}" target="_blank" rel="noopener noreferrer">
-            <h4 class="repo__name">${BRAND.github}<span>${esc(r.name)}</span></h4>
+          <a class="repo" href="${esc(safeUrl(r.html_url))}" target="_blank" rel="noopener noreferrer">
+            <h4 class="repo__name"><span>${esc(r.name)}</span></h4>
             <p class="repo__desc">${esc(r.description || "No description provided.")}</p>
             <p class="repo__meta">
-              ${r.language ? `<span><i class="lang-dot"></i>${esc(r.language)}</span>` : ""}
+              <span>${esc(r.language || "—")}</span>
               <span>${icon("star")}${count(r.stargazers_count)}</span>
               <span>${icon("fork")}${count(r.forks_count)}</span>
             </p>
@@ -423,9 +416,9 @@
     const apply = (theme) => {
       root.setAttribute("data-theme", theme);
       btn.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
-      if (meta) meta.setAttribute("content", theme === "dark" ? "#070b13" : "#faf9f7");
+      if (meta) meta.setAttribute("content", theme === "dark" ? "#111315" : "#f4f1ea");
     };
-    apply(root.getAttribute("data-theme") || "dark");
+    apply(root.getAttribute("data-theme") || "light");
 
     btn.addEventListener("click", () => {
       const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
@@ -544,22 +537,6 @@
     $$("main section[id]").forEach((s) => observer.observe(s));
   }
 
-  /* ---------------- Card spotlight (pointer-tracking) ---------------- */
-  function initSpotlight() {
-    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-    document.addEventListener(
-      "pointermove",
-      (e) => {
-        const card = e.target.closest && e.target.closest(".card");
-        if (!card) return;
-        const r = card.getBoundingClientRect();
-        card.style.setProperty("--mx", `${e.clientX - r.left}px`);
-        card.style.setProperty("--my", `${e.clientY - r.top}px`);
-      },
-      { passive: true }
-    );
-  }
-
   /* ---------------- Scroll reveal ---------------- */
   function initReveal() {
     // Hero elements animate in via CSS on load; only the rest wait for scroll
@@ -589,61 +566,6 @@
       if (index > 0) el.style.transitionDelay = `${Math.min(index, 6) * 70}ms`;
       observer.observe(el);
     });
-  }
-
-  /* ---------------- Hero code typing ---------------- */
-  function initHeroCode() {
-    const target = $("#heroCode");
-    if (!target) return;
-
-    const T = (cls, text) => [cls, text];
-    const str = (s) => T("tk-str", `"${s}"`);
-    const tokens = [
-      T("tk-key", "const"), T("", " "), T("tk-var", "developer"), T("", " = {\n"),
-      T("", "  "), T("tk-prop", "name"), T("", ": "), str(profile.name), T("", ",\n"),
-      T("", "  "), T("tk-prop", "role"), T("", ": "), str("Software Engineer"), T("", ",\n"),
-      T("", "  "), T("tk-prop", "location"), T("", ": "), str(profile.location), T("", ",\n"),
-      T("", "  "), T("tk-prop", "stack"), T("", ": ["), str("JavaScript"), T("", ", "), str("React"), T("", ",\n"),
-      T("", "          "), str("Node.js"), T("", ", "), str("SQL"), T("", "],\n"),
-      T("", "  "), T("tk-prop", "traits"), T("", ": ["), str("problem-solver"), T("", ",\n"),
-      T("", "           "), str("team-player"), T("", ", "), str("fast-learner"), T("", "],\n"),
-      T("", "  "), T("tk-prop", "openToWork"), T("", ": "), T("tk-bool", "true"), T("", ",\n"),
-      T("", "};\n\n"),
-      T("tk-var", "developer"), T("", "."), T("tk-fn", "build"), T("", "("), str("something great"), T("", ");"),
-    ];
-
-    // Line-number gutter
-    const lines = $("#heroLines");
-    if (lines) {
-      const count = tokens.reduce((n, [, t]) => n + (t.match(/\n/g) || []).length, 1);
-      lines.textContent = Array.from({ length: count }, (_, i) => i + 1).join("\n");
-    }
-
-    const spans = tokens.map(([cls, text]) => {
-      const span = document.createElement("span");
-      if (cls) span.className = cls;
-      target.appendChild(span);
-      return { span, text };
-    });
-
-    if (prefersReducedMotion) {
-      spans.forEach(({ span, text }) => (span.textContent = text));
-      return;
-    }
-
-    let ti = 0;
-    let ci = 0;
-    const tick = () => {
-      if (ti >= spans.length) return;
-      const { span, text } = spans[ti];
-      span.textContent = text.slice(0, ++ci);
-      if (ci >= text.length) {
-        ti += 1;
-        ci = 0;
-      }
-      setTimeout(tick, text[ci - 1] === "\n" ? 90 : 22);
-    };
-    setTimeout(tick, 500);
   }
 
   /* ---------------- Contact form ---------------- */
@@ -729,10 +651,10 @@
   /* ---------------- Init ---------------- */
   bindProfile();
   renderSocials();
+  renderGlance();
   renderStats();
   renderInterests();
   renderSkills();
-  renderTicker();
   renderProjects();
   renderExperience();
   renderEducation();
@@ -742,9 +664,7 @@
 
   initTheme();
   initNav();
-  initSpotlight();
   initReveal();
-  initHeroCode();
   initContactForm();
   loadGitHubRepos();
 

@@ -45,7 +45,11 @@
       if (theme === "light" || theme === "dark") localStorage.setItem(KEY, theme);
       localStorage.removeItem("theme");
     }
-    if (theme === "light" || theme === "dark") root.setAttribute("data-theme", theme);
+    // No saved choice: follow the operating system (paper by day, graphite by night)
+    if (theme !== "light" && theme !== "dark") {
+      theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.setAttribute("data-theme", theme);
   } catch (e) {
     /* storage unavailable */
   }

@@ -1,13 +1,30 @@
 # Developer Portfolio
 
-A fast, responsive, dependency-free personal portfolio for Software Engineer / Web Developer applications.
-Built with semantic HTML, modern CSS, and vanilla JavaScript — no build step required.
+A fast, responsive, dependency-free personal portfolio, designed as an **engineering datasheet**:
+title block, spec tables, numbered figures. Built with semantic HTML, modern CSS, and vanilla
+JavaScript — no frameworks, no build step, no third-party requests.
+
+## Design
+
+The site deliberately avoids the usual developer-portfolio kit (gradients, glow, fake code windows,
+floating cards). Instead it borrows the structure of a component datasheet:
+
+- **Surfaces** – warm drafting paper (light) and graphite (dark); the theme follows the visitor's
+  system setting until they choose one.
+- **Ink and rules** – hairline borders instead of shadows, square corners, one signal-orange accent.
+- **Type** – IBM Plex Sans (condensed for headings) and IBM Plex Mono for labels and data.
+- **Structure** – an "At a glance" spec table in the hero, skills as a pin table, projects as numbered
+  figure sheets with Type / Stack / Tests rows, experience and repositories as ruled tables, and a
+  drawing-style title block as the footer. "Rev." shows the month the page was last deployed.
+- **Print** – `Ctrl+P` produces a clean paper document.
+
+All colors pass WCAG AA (4.5:1) in both themes.
 
 ## Features
 
-- Dark theme by default with a light/dark toggle (remembers the visitor's choice)
+- Paper and graphite themes: follows the system setting, with a toggle that remembers the visitor's choice
 - Sticky navigation with active-section highlighting and a mobile hamburger menu
-- Hero with animated code editor, resume download, and social links
+- Hero with an "At a glance" spec table, key figures, resume download, and social links
 - Data-driven sections: About, Skills, Projects, GitHub, Experience, Education, Certifications, Services, Contact
 - Optional live GitHub repositories (via the public GitHub API)
 - Contact form with validation, spam honeypot, and Formspree support (falls back to `mailto:`)
@@ -29,7 +46,7 @@ MyPortfolio/
 ├── resume/                     # Resume source (resume.html) + PDF build script
 ├── assets/
 │   ├── favicon.svg
-│   ├── fonts/                  # self-hosted Sora, Inter, JetBrains Mono (WOFF2, SIL OFL)
+│   ├── fonts/                  # self-hosted IBM Plex Sans + IBM Plex Mono (WOFF2, SIL OFL)
 │   ├── icons/                  # self-hosted skill icons (Devicon, MIT)
 │   ├── apple-touch-icon.png    # 180×180 home-screen icon
 │   ├── resume.pdf              # built from resume/ with `node resume/build-resume.mjs`
@@ -46,7 +63,8 @@ MyPortfolio/
 
 ## Customize it
 
-1. **Your details** – open `js/data.js` and edit `profile` (name, initials, email, GitHub, LinkedIn…).
+1. **Your details** – open `js/data.js` and edit `profile` (name, initials, email, GitHub, LinkedIn…)
+   and the `glance` rows shown in the hero's "At a glance" table.
 2. **SEO tags** – in `index.html`, replace `Your Name` and `https://your-domain.com/` in the `<head>`
    (title, description, Open Graph, canonical URL). These are read by search engines and social sites
    before JavaScript runs, so they must be edited in the HTML.
@@ -55,15 +73,16 @@ MyPortfolio/
 5. **Projects** – edit the `projects` array. Add screenshots (16:10, e.g. 1280×800) to `assets/projects/`
    and point `image` to them (PNG for flat UI, WebP for photo- or gradient-heavy shots — whichever
    is smaller). Set `github` or `demo` to `""` to hide that button; add `download` for an extra
-   "Download" button; `featured: true` makes a project span the full width.
+   "Download" button; `type` and `tests` fill the project's spec rows; `featured: true` makes a
+   project span the full width.
 6. **Skills, experience, education, certifications, services** – edit the matching arrays.
    Setting `certifications: []` hides that section entirely. Skills also feed the scrolling
    technology ticker under the hero.
 7. **Hero stats** – edit the `stats` array (value + label). They count up on load and are hidden
    when the array is empty. Leave `profile.linkedin` (or any social) as `""` to hide its icon.
 8. **Social preview image** – replace `assets/images/og-image.png` (1200×630) with one showing your name.
-9. **Colors & type** – change `--accent`, `--accent-2`, and `--gradient` at the top of `css/styles.css`.
-   Headings use Sora, body text Inter, and code JetBrains Mono (self-hosted in `assets/fonts/`).
+9. **Colors & type** – edit the tokens at the top of `css/styles.css` (`--bg`, `--text`, `--accent`… for
+   paper, and the `[data-theme="dark"]` block for graphite). Fonts are self-hosted in `assets/fonts/`.
 10. **Skill icons** – drop an SVG into `assets/icons/` and point the skill's `icon` at it
     (`${ICONS}/name.svg`). Icons from other websites are blocked by the security policy.
 

@@ -16,7 +16,9 @@ const PORTFOLIO = {
     initials: "PU",
     role: "Software Engineer | Full-Stack Developer",
     tagline:
-      "I build modern, responsive, and user-friendly applications while continuously improving my skills in software development and problem solving.",
+      "Computer Engineering student who designs, builds, tests, and ships full-stack software — from React interfaces to REST APIs and SQL schemas.",
+    // Shown as the document number in the hero and footer (initials + graduation year)
+    partNumber: "PPU-2028",
     email: "peterpaulungab00@gmail.com",
     location: "Digos City, Philippines",
     availability:
@@ -27,8 +29,17 @@ const PORTFOLIO = {
     resume: "assets/resume.pdf",
     // Replace with your own photo, e.g. "assets/images/profile.jpg"
     photo: "assets/images/profile-placeholder.svg",
-    photoAlt: "Portrait of Peter Paul Ungab",
+    photoAlt: "Monogram of Peter Paul Ungab", // change to "Portrait of …" when you add a real photo
   },
+
+  /* ---------------- Hero: "At a glance" table ----------------
+     Short label/value rows. A Status row (profile.availabilityShort) is added automatically. */
+  glance: [
+    { label: "Role", value: "Full-stack developer" },
+    { label: "Based in", value: "Digos City, Philippines" },
+    { label: "Education", value: "BS Computer Engineering, 2028" },
+    { label: "Core stack", value: "JavaScript · React · Node.js · Java · SQL" },
+  ],
 
   /* ---------------- Integrations ---------------- */
   integrations: {
@@ -116,10 +127,13 @@ const PORTFOLIO = {
      Replace these examples with your real projects.
      Set github/demo to "" to hide a button. featured: true = wide card.
      demoLabel: optional text for the demo button (e.g. "Download App").
-     download: optional link for an extra "Download" button (e.g. a release page). */
+     download: optional link for an extra "Download" button (e.g. a release page).
+     type / tests: optional rows for the project's spec table. */
   projects: [
     {
       title: "Task Management Application",
+      type: "Web app · client-side",
+      tests: "29 automated browser tests",
       image: "assets/projects/task-manager.png",
       description:
         "A responsive web application that allows users to create, organize, update, and manage daily tasks.",
@@ -136,6 +150,8 @@ const PORTFOLIO = {
     },
     {
       title: "E-Commerce Website",
+      type: "Full-stack web app",
+      tests: "25 automated API tests",
       image: "assets/projects/ecommerce.webp",
       description:
         "Lumora — a modern online store with product browsing, a persistent shopping cart, checkout, and order history, backed by a REST API.",
@@ -151,6 +167,8 @@ const PORTFOLIO = {
     },
     {
       title: "Real-Time Chat Application",
+      type: "Full-stack web app · WebSockets",
+      tests: "22 integration tests",
       image: "assets/projects/chat-app.png",
       description:
         "Parley — a real-time messaging application where users chat in rooms through a clean, responsive interface.",
@@ -166,6 +184,8 @@ const PORTFOLIO = {
     },
     {
       title: "Student Management System",
+      type: "Desktop app + web edition",
+      tests: "73 unit tests",
       image: "assets/projects/student-system.webp",
       description:
         "A desktop application for managing student records, courses, enrollments, and grades on a normalized MySQL database — with a web edition that runs the same SQL schema in your browser.",
@@ -182,15 +202,16 @@ const PORTFOLIO = {
     },
     {
       title: "Personal Portfolio Website",
+      type: "Static site · no dependencies",
       image: "assets/projects/portfolio.webp",
       description:
-        "A responsive developer portfolio showcasing my projects, skills, education, and experience.",
+        "This site — a datasheet-style portfolio with no frameworks, no build step, and no third-party requests.",
       tech: ["HTML", "CSS", "JavaScript"],
       features: [
-        "Data-driven, easily editable content",
-        "Light / dark theme toggle",
-        "Accessible, SEO-friendly markup",
-        "Working contact form",
+        "Strict Content-Security-Policy with self-hosted fonts and icons",
+        "Every section rendered from one editable data file",
+        "Paper and graphite themes that follow the system setting",
+        "Accessible markup, print stylesheet, and no-JavaScript fallback",
       ],
       github: "https://github.com/PeterUngab34/PeterUngab34.github.io",
       demo: "https://peterungab34.github.io/",
@@ -282,22 +303,22 @@ const PORTFOLIO = {
     {
       title: "Web Development",
       icon: "globe",
-      text: "I build responsive and modern websites for desktop and mobile devices.",
+      text: "Responsive sites that work on any screen, built without heavy dependencies and checked in real browsers.",
     },
     {
       title: "Software Development",
       icon: "code",
-      text: "I develop applications while focusing on clean, maintainable, and efficient code.",
+      text: "Desktop and web applications with readable, maintainable code — backed by automated tests, not hope.",
     },
     {
       title: "Front-End Development",
       icon: "layout",
-      text: "I create clean and user-friendly interfaces.",
+      text: "Accessible, keyboard-friendly interfaces in React or vanilla JavaScript, with light and dark themes.",
     },
     {
       title: "Back-End Development",
       icon: "server",
-      text: "I build application logic, APIs, and database integrations.",
+      text: "REST APIs with Node.js and Express: authentication, validation, rate limiting, and SQL or NoSQL schemas.",
     },
   ],
 

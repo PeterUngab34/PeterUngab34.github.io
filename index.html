@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,7 +18,7 @@
   <meta name="keywords" content="Software Engineer, Web Developer, Full-Stack Developer, Front-End Developer, Back-End Developer, JavaScript, React, Node.js, Python, Java, Portfolio, Philippines" />
   <meta name="author" content="Peter Paul Ungab" />
   <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#070b13" />
+  <meta name="theme-color" content="#f4f1ea" />
   <link rel="canonical" href="https://peterungab34.github.io/" />
 
   <!-- Open Graph / social sharing -->
@@ -64,10 +64,10 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 
-  <!-- Fonts: Sora (display) · Inter (body) · JetBrains Mono (code), self-hosted via @font-face in styles.css.
-       The two above-the-fold families are preloaded; system fonts show until the swap. -->
-  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/sora-latin.woff2" crossorigin />
-  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/inter-latin.woff2" crossorigin />
+  <!-- Fonts: IBM Plex Sans (text + condensed display) · IBM Plex Mono (labels, data), self-hosted via
+       @font-face in styles.css. The two above-the-fold files are preloaded; system fonts show until the swap. -->
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/plex-sans-latin.woff2" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/plex-mono-500-latin.woff2" crossorigin />
 
   <link rel="stylesheet" href="css/styles.css" />
 
@@ -96,7 +96,7 @@
 
       <ul class="nav__links" id="navLinks">
         <li class="nav__indicator" role="presentation" aria-hidden="true"></li>
-        <li><a href="#home" class="nav__link">Home</a></li>
+        <li><a href="#home" class="nav__link">Index</a></li>
         <li><a href="#about" class="nav__link">About</a></li>
         <li><a href="#skills" class="nav__link">Skills</a></li>
         <li><a href="#projects" class="nav__link">Projects</a></li>
@@ -106,19 +106,19 @@
         <li class="nav__mobile-resume">
           <a href="assets/resume.pdf" class="btn btn--primary btn--block" download="Peter-Paul-Ungab-Resume.pdf" data-bind-href="resume">
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            Download Resume
+            Download resume
           </a>
         </li>
       </ul>
 
       <div class="nav__actions">
-        <button class="icon-btn" id="themeToggle" type="button" aria-label="Switch to light mode">
+        <button class="icon-btn" id="themeToggle" type="button" aria-label="Switch to dark mode">
           <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
           <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
         <a href="assets/resume.pdf" class="btn btn--primary btn--sm nav__resume" download="Peter-Paul-Ungab-Resume.pdf" data-bind-href="resume">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
           Resume
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
         </a>
         <button class="icon-btn nav__toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
           <span class="hamburger" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -128,134 +128,99 @@
   </header>
 
   <main id="main">
-    <!-- ========== HERO ========== -->
+    <!-- ========== HERO / TITLE SHEET ========== -->
     <section class="hero" id="home" aria-labelledby="heroTitle">
-      <div class="hero__bg" aria-hidden="true">
-        <div class="hero__mesh"></div>
-        <div class="hero__grid"></div>
-      </div>
-
       <div class="container hero__inner">
         <div class="hero__content">
-          <p class="hero__status reveal">
-            <span class="status-dot" aria-hidden="true"></span>
-            <span data-bind="availabilityShort">Open to opportunities</span>
+          <p class="doc-line reveal">
+            <span>Datasheet</span>
+            <span data-bind="partNumber">PPU-2028</span>
+            <span>Rev. <span data-rev>2026.09</span></span>
           </p>
-          <h1 class="hero__title reveal" id="heroTitle">
-            <span class="hero__hello">Hi, I'm</span>
-            <span class="gradient-text" data-bind="name">Peter Paul Ungab</span>
-          </h1>
+          <h1 class="hero__title reveal" id="heroTitle" data-bind="name">Peter Paul Ungab</h1>
           <p class="hero__role reveal" data-bind="role">Software Engineer | Full-Stack Developer</p>
           <p class="hero__desc reveal" data-bind="tagline">
-            I build modern, responsive, and user-friendly applications while continuously improving my skills in software development and problem solving.
+            Computer Engineering student who designs, builds, tests, and ships full-stack software.
           </p>
 
           <div class="hero__cta reveal">
             <a href="#projects" class="btn btn--primary">
-              View My Projects
+              View projects
               <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
             <a href="assets/resume.pdf" class="btn btn--outline" download="Peter-Paul-Ungab-Resume.pdf" data-bind-href="resume">
+              Download resume
               <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-              Download Resume
             </a>
-            <a href="#contact" class="btn btn--ghost">Contact Me</a>
+            <a href="#contact" class="link-arrow">Contact me</a>
           </div>
 
           <ul class="socials reveal" data-socials aria-label="Social links"></ul>
+        </div>
 
+        <!-- "At a glance" spec table; rows come from PORTFOLIO.glance in js/data.js -->
+        <aside class="spec reveal" aria-labelledby="specTitle">
+          <p class="table-caption" id="specTitle"><span>Table 0</span> At a glance</p>
+          <dl class="spec__rows" data-glance>
+            <div><dt>Role</dt><dd>Full-stack developer</dd></div>
+            <div><dt>Based in</dt><dd>Digos City, Philippines</dd></div>
+            <div><dt>Status</dt><dd>Open to opportunities</dd></div>
+          </dl>
           <!-- Fallback markup; re-rendered from PORTFOLIO.stats in js/data.js -->
-          <ul class="hero__stats reveal" data-stats aria-label="Highlights">
+          <ul class="hero__stats" data-stats aria-label="Key figures">
             <li><span class="stat__value">5</span><span class="stat__label">Projects built</span></li>
             <li><span class="stat__value">149</span><span class="stat__label">Automated tests written</span></li>
             <li><span class="stat__value">22</span><span class="stat__label">Technologies</span></li>
           </ul>
-        </div>
-
-        <!-- Code editor visual -->
-        <div class="hero__visual reveal" aria-hidden="true">
-          <div class="code-window">
-            <div class="code-window__bar">
-              <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
-              <span class="code-window__file">developer.js</span>
-              <span class="code-window__lang">JavaScript</span>
-            </div>
-            <div class="code-window__body">
-              <pre class="code-window__lines" id="heroLines"></pre>
-              <pre class="code-window__code"><code id="heroCode"></code><span class="caret"></span></pre>
-            </div>
-          </div>
-          <div class="floating-badge floating-badge--1">
-            <span class="floating-badge__icon">&lt;/&gt;</span>
-            <span><strong>Clean Code</strong><small>Readable &amp; maintainable</small></span>
-          </div>
-          <div class="floating-badge floating-badge--2">
-            <span class="floating-badge__icon">
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-            </span>
-            <span><strong>Full-Stack</strong><small>Front-end to database</small></span>
-          </div>
-        </div>
+        </aside>
       </div>
-
-      <a href="#about" class="scroll-cue" aria-label="Scroll to About section">
-        <span></span>
-      </a>
     </section>
-
-    <!-- Technology ticker (decorative; the Skills section lists everything accessibly) -->
-    <div class="ticker" aria-hidden="true">
-      <div class="ticker__track" data-ticker></div>
-    </div>
 
     <!-- ========== ABOUT ========== -->
     <section class="section" id="about" aria-labelledby="aboutTitle">
       <div class="container">
         <header class="section__header reveal">
           <p class="section__eyebrow">01 · About</p>
-          <h2 class="section__title" id="aboutTitle">About Me</h2>
+          <h2 class="section__title" id="aboutTitle">About</h2>
         </header>
 
         <div class="about">
-          <div class="about__photo reveal">
-            <div class="photo-frame">
+          <figure class="figure about__photo reveal">
+            <div class="figure__frame photo-frame">
               <!-- Replace with your photo: assets/images/profile.jpg -->
               <img src="assets/images/profile-placeholder.svg" alt="Portrait of Peter Paul Ungab" width="480" height="560" loading="lazy" data-bind-src="photo" data-bind-alt="photoAlt" />
             </div>
-          </div>
+            <figcaption class="figure__caption"><span>Fig. A</span> <span data-bind="name">Peter Paul Ungab</span></figcaption>
+          </figure>
 
           <div class="about__content reveal">
             <p class="lead">
-              I'm an aspiring <strong>Software Engineer</strong> passionate about building reliable, well-designed software that solves real problems.
+              I'm an aspiring <strong>software engineer</strong> studying Computer Engineering, and I like software that is reliable, well-tested, and pleasant to use.
             </p>
             <p>
-              I enjoy the full process of software development — breaking down problems, designing clean solutions, writing maintainable code, and polishing the details that make an application pleasant to use. I'm comfortable working across the stack, from responsive user interfaces to REST APIs and databases.
+              I enjoy the full process — breaking a problem down, designing a clean solution, writing maintainable code, and polishing the details that make an application feel finished. I'm comfortable across the stack, from responsive interfaces to REST APIs and relational schemas.
             </p>
             <p>
-              I'm continuously learning new technologies and best practices, and I'm looking for opportunities where I can contribute to a team, learn from experienced engineers, and grow as a developer.
+              I'm looking for a team where I can contribute, learn from experienced engineers, and keep shipping.
             </p>
 
             <h3 class="about__subtitle">Areas of interest</h3>
             <ul class="tag-list" data-interests></ul>
 
-            <dl class="about__facts">
-              <div><dt>Location</dt><dd data-bind="location">Philippines</dd></div>
-              <div><dt>Focus</dt><dd>Full-Stack Development</dd></div>
-              <div><dt>Status</dt><dd data-bind="availabilityShort">Open to opportunities</dd></div>
-            </dl>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ========== SKILLS ========== -->
-    <section class="section section--alt" id="skills" aria-labelledby="skillsTitle">
+    <section class="section" id="skills" aria-labelledby="skillsTitle">
       <div class="container">
         <header class="section__header reveal">
           <p class="section__eyebrow">02 · Skills</p>
-          <h2 class="section__title" id="skillsTitle">Technical Skills</h2>
+          <h2 class="section__title" id="skillsTitle">Technical skills</h2>
           <p class="section__subtitle">Languages, frameworks, and tools I use to design, build, and ship software.</p>
         </header>
+        <p class="table-caption reveal"><span>Table 1</span> Technical specifications</p>
         <div class="skills" data-skills></div>
       </div>
     </section>
@@ -265,33 +230,30 @@
       <div class="container">
         <header class="section__header reveal">
           <p class="section__eyebrow">03 · Projects</p>
-          <h2 class="section__title" id="projectsTitle">Featured Projects</h2>
-          <p class="section__subtitle">A selection of applications I've designed and built — from idea to working product.</p>
+          <h2 class="section__title" id="projectsTitle">Selected projects</h2>
+          <p class="section__subtitle">Applications I designed, built, tested, and deployed — each with a live demo and source code.</p>
         </header>
         <div class="projects-grid" data-projects></div>
       </div>
     </section>
 
     <!-- ========== GITHUB ========== -->
-    <section class="section section--tight section--alt" id="github" aria-labelledby="githubTitle">
+    <section class="section section--tight" id="github" aria-labelledby="githubTitle">
       <div class="container">
         <div class="github-cta reveal">
-          <div class="github-cta__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.4-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
-          </div>
           <div class="github-cta__text">
-            <h2 class="github-cta__title" id="githubTitle">Want to see more of my work?</h2>
-            <p>Explore my repositories, experiments, and ongoing projects on GitHub.</p>
+            <h2 class="github-cta__title" id="githubTitle">More on GitHub</h2>
+            <p>Every project above is open source, with tests and commit history you can read.</p>
           </div>
-          <a href="https://github.com/PeterUngab34" class="btn btn--primary" target="_blank" rel="noopener noreferrer" data-bind-href="github">
-            Visit My GitHub
+          <a href="https://github.com/PeterUngab34" class="btn btn--outline" target="_blank" rel="noopener noreferrer" data-bind-href="github">
+            Visit my GitHub
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
           </a>
         </div>
 
         <!-- Latest public repositories (auto-loaded when a GitHub username is set in js/data.js) -->
         <div class="repos" data-repos hidden>
-          <h3 class="repos__title">Latest repositories</h3>
+          <h3 class="table-caption"><span>Table 2</span> Latest repositories</h3>
           <div class="repos-grid" data-repos-grid></div>
         </div>
       </div>
@@ -303,14 +265,14 @@
         <header class="section__header reveal">
           <p class="section__eyebrow">04 · Experience</p>
           <h2 class="section__title" id="experienceTitle">Experience</h2>
-          <p class="section__subtitle">Hands-on development experience through academic, personal, and independent work.</p>
+          <p class="section__subtitle">Hands-on development through academic, personal, and independent work.</p>
         </header>
         <ol class="timeline" data-experience></ol>
       </div>
     </section>
 
     <!-- ========== EDUCATION ========== -->
-    <section class="section section--alt" id="education" aria-labelledby="educationTitle">
+    <section class="section" id="education" aria-labelledby="educationTitle">
       <div class="container">
         <header class="section__header reveal">
           <p class="section__eyebrow">05 · Education</p>
@@ -336,67 +298,49 @@
     <section class="section" id="services" aria-labelledby="servicesTitle">
       <div class="container">
         <header class="section__header reveal">
-          <p class="section__eyebrow">07 · What I Do</p>
-          <h2 class="section__title" id="servicesTitle">What I Can Contribute</h2>
-          <p class="section__subtitle">How I can add value to your team or project.</p>
+          <p class="section__eyebrow">07 · What I do</p>
+          <h2 class="section__title" id="servicesTitle">What I can contribute</h2>
+          <p class="section__subtitle">Where I can add value to a team or project.</p>
         </header>
         <div class="services-grid" data-services></div>
       </div>
     </section>
 
     <!-- ========== CONTACT ========== -->
-    <section class="section section--alt" id="contact" aria-labelledby="contactTitle">
+    <section class="section" id="contact" aria-labelledby="contactTitle">
       <div class="container">
         <header class="section__header reveal">
           <p class="section__eyebrow">08 · Contact</p>
-          <h2 class="section__title" id="contactTitle">Let's Work Together</h2>
-          <p class="section__subtitle">Have an opportunity, project, or question? My inbox is always open.</p>
+          <h2 class="section__title" id="contactTitle">Get in touch</h2>
+          <p class="section__subtitle">Have an internship, a project, or a question? I read every message.</p>
         </header>
 
         <div class="contact">
           <aside class="contact__info reveal">
-            <div class="info-item">
-              <span class="info-item__icon" aria-hidden="true">
-                <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
-              </span>
+            <p class="table-caption"><span>Table 3</span> Contact details</p>
+            <dl class="spec__rows">
               <div>
-                <p class="info-item__label">Email</p>
-                <a class="info-item__value" href="mailto:peterpaulungab00@gmail.com" data-bind="email" data-bind-href="mailto">peterpaulungab00@gmail.com</a>
+                <dt>Email</dt>
+                <dd><a class="info-link" href="mailto:peterpaulungab00@gmail.com" data-bind="email" data-bind-href="mailto">peterpaulungab00@gmail.com</a></dd>
               </div>
-            </div>
-            <div class="info-item">
-              <span class="info-item__icon" aria-hidden="true">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              </span>
+              <div><dt>Location</dt><dd data-bind="location">Philippines</dd></div>
+              <div><dt>Availability</dt><dd data-bind="availability">Open to internships, freelance projects, and software engineering opportunities.</dd></div>
               <div>
-                <p class="info-item__label">Location</p>
-                <p class="info-item__value" data-bind="location">Philippines</p>
+                <dt>Elsewhere</dt>
+                <dd><ul class="socials" data-socials aria-label="Social links"></ul></dd>
               </div>
-            </div>
-            <div class="info-item">
-              <span class="info-item__icon" aria-hidden="true">
-                <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
-              </span>
-              <div>
-                <p class="info-item__label">Availability</p>
-                <p class="info-item__value info-item__value--muted" data-bind="availability">Open to internships, freelance projects, and software engineering opportunities.</p>
-              </div>
-            </div>
-            <div class="contact__follow">
-              <p class="info-item__label">Elsewhere</p>
-              <ul class="socials socials--boxed" data-socials aria-label="Social links"></ul>
-            </div>
+            </dl>
           </aside>
 
           <form class="contact__form reveal" id="contactForm" novalidate>
             <div class="form-row">
               <div class="field">
-                <label for="name">Full Name</label>
+                <label for="name">Full name</label>
                 <input id="name" name="name" type="text" autocomplete="name" placeholder="Juan Dela Cruz" required />
                 <p class="field__error" aria-live="polite"></p>
               </div>
               <div class="field">
-                <label for="email">Email Address</label>
+                <label for="email">Email address</label>
                 <input id="email" name="email" type="email" autocomplete="email" placeholder="juan@company.com" required />
                 <p class="field__error" aria-live="polite"></p>
               </div>
@@ -414,9 +358,9 @@
             <!-- Honeypot field for bots (hidden from users) -->
             <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
-            <button type="submit" class="btn btn--primary btn--block btn--lg" id="submitBtn">
-              <span class="btn__label">Send Message</span>
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4 20-7z"/><path d="M22 2 11 13"/></svg>
+            <button type="submit" class="btn btn--primary btn--lg" id="submitBtn">
+              <span class="btn__label">Send message</span>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </button>
             <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
           </form>
@@ -425,27 +369,30 @@
     </section>
   </main>
 
-  <!-- ========== FOOTER ========== -->
+  <!-- ========== FOOTER / TITLE BLOCK ========== -->
   <footer class="footer">
-    <div class="container footer__inner">
-      <div>
-        <a href="#home" class="nav__logo">
-          <span class="nav__logo-mark" data-bind="initials" aria-hidden="true">PU</span>
-          <span class="nav__logo-text" data-bind="name">Peter Paul Ungab</span>
-        </a>
-        <p class="footer__built">Designed &amp; built by <span data-bind="name">Peter Paul Ungab</span> with HTML, CSS, and vanilla JavaScript.</p>
+    <div class="container">
+      <dl class="title-block">
+        <div class="title-block__name">
+          <dt>Title</dt>
+          <dd><span data-bind="name">Peter Paul Ungab</span> — portfolio</dd>
+        </div>
+        <div><dt>Drawn by</dt><dd data-bind="name">Peter Paul Ungab</dd></div>
+        <div><dt>Built with</dt><dd>HTML · CSS · JavaScript</dd></div>
+        <div><dt>Doc no.</dt><dd data-bind="partNumber">PPU-2028</dd></div>
+        <div><dt>Rev.</dt><dd data-rev>2026.09</dd></div>
+        <div><dt>Sheet</dt><dd>1 of 1</dd></div>
+      </dl>
+      <div class="footer__bottom">
+        <p>© <span id="year">2026</span> <span data-bind="name">Peter Paul Ungab</span></p>
+        <nav class="footer__nav" aria-label="Footer">
+          <a href="#about">About</a>
+          <a href="#projects">Projects</a>
+          <a href="#experience">Experience</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <a href="#home" class="footer__top">Back to top ↑</a>
       </div>
-      <nav class="footer__nav" aria-label="Footer">
-        <a href="#about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="#experience">Experience</a>
-        <a href="#contact">Contact</a>
-      </nav>
-      <ul class="socials" data-socials aria-label="Social links"></ul>
-    </div>
-    <div class="container footer__bottom">
-      <p>© <span id="year">2026</span> <span data-bind="name">Peter Paul Ungab</span>. All rights reserved.</p>
-      <a href="#home" class="footer__top">Back to top ↑</a>
     </div>
   </footer>
 

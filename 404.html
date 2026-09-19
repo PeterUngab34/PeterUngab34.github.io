@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,7 +8,7 @@
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>Page not found | Peter Paul Ungab</title>
   <meta name="robots" content="noindex" />
-  <meta name="theme-color" content="#070b13" />
+  <meta name="theme-color" content="#f4f1ea" />
 
   <!-- Absolute paths: GitHub Pages serves this file for any missing URL, at any depth -->
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
@@ -29,22 +29,19 @@
   </header>
 
   <main class="hero notfound" id="main">
-    <div class="hero__bg" aria-hidden="true">
-      <div class="hero__mesh"></div>
-      <div class="hero__grid"></div>
-    </div>
-
-    <div class="container notfound__inner">
-      <p class="section__eyebrow notfound__eyebrow">Error 404</p>
-      <p class="notfound__code gradient-text" aria-hidden="true">404</p>
-      <h1 class="notfound__title">This page doesn't exist</h1>
-      <p class="notfound__text">The link may be broken or the page may have moved. Everything I've built is still one click away.</p>
-      <div class="notfound__actions">
-        <a href="/" class="btn btn--primary">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
-          Back to home
-        </a>
-        <a href="/#projects" class="btn btn--outline">View my projects</a>
+    <div class="container">
+      <div class="notfound__inner">
+        <p class="doc-line"><span>Error</span><span>HTTP 404</span><span>Sheet not found</span></p>
+        <p class="notfound__code" aria-hidden="true">404</p>
+        <h1 class="notfound__title">This page doesn't exist</h1>
+        <p class="notfound__text">The link may be broken or the page may have moved. Everything I've built is still one click away.</p>
+        <div class="notfound__actions">
+          <a href="/" class="btn btn--primary">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+            Back to index
+          </a>
+          <a href="/#projects" class="btn btn--outline">View my projects</a>
+        </div>
       </div>
     </div>
   </main>
