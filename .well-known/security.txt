@@ -1,0 +1,5 @@
+# Security contact for https://peterungab34.github.io/ (RFC 9116)
+Contact: mailto:peterpaulungab00@gmail.com
+Expires: 2027-09-19T00:00:00.000Z
+Preferred-Languages: en, fil
+Canonical: https://peterungab34.github.io/.well-known/security.txt

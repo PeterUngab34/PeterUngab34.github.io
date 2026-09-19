@@ -15,6 +15,21 @@
   const esc = (str = "") =>
     String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
+  // Only http(s), mailto and same-site relative URLs may become links or image sources.
+  // Blocks javascript:/data: URLs even if js/data.js or an API response is tampered with.
+  const safeUrl = (url = "") => {
+    const value = String(url).trim();
+    if (!value) return "";
+    try {
+      const { protocol } = new URL(value, document.baseURI);
+      // file: keeps relative paths working when index.html is opened straight from disk
+      return ["http:", "https:", "mailto:", "file:"].includes(protocol) ? value : "";
+    } catch (e) {
+      return "";
+    }
+  };
+  const count = (n) => (Number.isFinite(Number(n)) ? Number(n) : 0);
+
   /* ---------------- Icons (inline SVG, stroke-based) ---------------- */
   const PATHS = {
     code: '<path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/>',
@@ -54,11 +69,11 @@
     $$("[data-bind-href]").forEach((el) => {
       const key = el.dataset.bindHref;
       const value = key === "mailto" ? `mailto:${profile.email}` : profile[key];
-      if (value) el.setAttribute("href", value);
+      if (safeUrl(value)) el.setAttribute("href", safeUrl(value));
     });
     $$("[data-bind-src]").forEach((el) => {
       const value = profile[el.dataset.bindSrc];
-      if (value) el.setAttribute("src", value);
+      if (safeUrl(value)) el.setAttribute("src", safeUrl(value));
     });
     $$("[data-bind-alt]").forEach((el) => {
       const value = profile[el.dataset.bindAlt];
@@ -75,10 +90,10 @@
       { label: "GitHub", href: profile.github, svg: BRAND.github, external: true },
       { label: "LinkedIn", href: profile.linkedin, svg: BRAND.linkedin, external: true },
       { label: "Email", href: profile.email ? `mailto:${profile.email}` : "", svg: BRAND.email },
-    ].filter((l) => l.href && String(l.href).trim());
+    ].filter((l) => safeUrl(l.href));
     const html = links
       .map(
-        (l) => `<li><a class="social" href="${esc(l.href)}" aria-label="${l.label}" title="${l.label}"${
+        (l) => `<li><a class="social" href="${esc(safeUrl(l.href))}" aria-label="${l.label}" title="${l.label}"${
           l.external ? ' target="_blank" rel="noopener noreferrer"' : ""
         }>${l.svg}</a></li>`
       )
@@ -129,7 +144,7 @@
 
   function skillIcon(item) {
     if (item.icon) {
-      return `<img src="${esc(item.icon)}" alt="" width="22" height="22" loading="lazy" decoding="async" class="skill__img${
+      return `<img src="${esc(safeUrl(item.icon))}" alt="" width="22" height="22" loading="lazy" decoding="async" class="skill__img${
         item.invert ? " skill__img--invert" : ""
       }" data-fallback="${esc(item.badge || item.name.slice(0, 2))}" />`;
     }
@@ -199,10 +214,16 @@
     const el = $("[data-projects]");
     if (!el) return;
     el.innerHTML = data.projects
-      .map((p) => {
+      .map((project) => {
+        const p = {
+          ...project,
+          github: safeUrl(project.github),
+          demo: safeUrl(project.demo),
+          download: safeUrl(project.download),
+        };
         const link = p.demo || p.github;
         const viewLabel = p.demo ? p.demoLabel || "View project" : "View code";
-        const media = `<img src="${esc(p.image)}" alt="Screenshot of ${esc(p.title)}" loading="lazy" decoding="async" width="1280" height="800" />`;
+        const media = `<img src="${esc(safeUrl(p.image))}" alt="Screenshot of ${esc(p.title)}" loading="lazy" decoding="async" width="1280" height="800" />`;
         const view = `<span class="project__view" aria-hidden="true"><span>${esc(viewLabel)} ${icon(
           p.demo && p.demoLabel ? "download" : "arrow"
         )}</span></span>`;
@@ -320,8 +341,8 @@
           <p class="cert__org">${esc(c.org)}</p>
           <p class="cert__date">${icon("calendar")}${esc(c.date)}</p>
           ${
-            c.url
-              ? `<a class="link-arrow" href="${esc(c.url)}" target="_blank" rel="noopener noreferrer">View Certificate ${icon("external")}</a>`
+            safeUrl(c.url)
+              ? `<a class="link-arrow" href="${esc(safeUrl(c.url))}" target="_blank" rel="noopener noreferrer">View Certificate ${icon("external")}</a>`
               : ""
           }
         </article>`
@@ -345,7 +366,7 @@
       .map(
         (s, i) => `
         <article class="card service reveal">
-          <span class="service__index" aria-hidden="true">0${i + 1}</span>
+          <span class="service__index" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
           <span class="icon-box icon-box--lg">${icon(s.icon)}</span>
           <h3>${esc(s.title)}</h3>
           <p>${esc(s.text)}</p>
@@ -368,20 +389,20 @@
       );
       if (!res.ok) throw new Error(`GitHub API ${res.status}`);
       const repos = (await res.json())
-        .filter((r) => !r.fork && !r.archived)
+        .filter((r) => !r.fork && !r.archived && safeUrl(r.html_url))
         .slice(0, integrations.githubRepoCount || 6);
       if (!repos.length) return;
 
       grid.innerHTML = repos
         .map(
           (r) => `
-          <a class="card repo" href="${esc(r.html_url)}" target="_blank" rel="noopener noreferrer">
+          <a class="card repo" href="${esc(safeUrl(r.html_url))}" target="_blank" rel="noopener noreferrer">
             <h4 class="repo__name">${BRAND.github}<span>${esc(r.name)}</span></h4>
             <p class="repo__desc">${esc(r.description || "No description provided.")}</p>
             <p class="repo__meta">
               ${r.language ? `<span><i class="lang-dot"></i>${esc(r.language)}</span>` : ""}
-              <span>${icon("star")}${r.stargazers_count}</span>
-              <span>${icon("fork")}${r.forks_count}</span>
+              <span>${icon("star")}${count(r.stargazers_count)}</span>
+              <span>${icon("fork")}${count(r.forks_count)}</span>
             </p>
           </a>`
         )
@@ -415,7 +436,7 @@
       }
       apply(next);
       try {
-        localStorage.setItem("theme", next);
+        localStorage.setItem("portfolio.theme", next);
       } catch (e) {
         /* storage unavailable */
       }
@@ -673,7 +694,8 @@
       if (form.elements._gotcha.value) return; // bot
 
       const values = Object.fromEntries(inputs.map((i) => [i.name, i.value.trim()]));
-      const endpoint = (integrations.formEndpoint || "").trim();
+      const rawEndpoint = (integrations.formEndpoint || "").trim();
+      const endpoint = /^https:///i.test(rawEndpoint) ? rawEndpoint : ""; // never post a message over plain http
 
       // No form backend configured: hand off to the visitor's email client
       if (!endpoint) {
@@ -725,4 +747,7 @@
   initHeroCode();
   initContactForm();
   loadGitHubRepos();
+
+  // Tells js/theme.js that rendering finished (see the .js failsafe there)
+  document.documentElement.classList.add("is-ready");
 })();

@@ -3,43 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Same policy as index.html; this page makes no API calls, so connect-src stays closed -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>Page not found | Peter Paul Ungab</title>
   <meta name="robots" content="noindex" />
   <meta name="theme-color" content="#070b13" />
 
   <!-- Absolute paths: GitHub Pages serves this file for any missing URL, at any depth -->
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="/css/styles.css" />
 
-  <style>
-    .notfound { justify-content: center; text-align: center; padding-bottom: 64px; }
-    .notfound__inner { position: relative; max-width: 620px; }
-    .notfound__code {
-      font-family: var(--font-display);
-      font-size: clamp(6rem, 22vw, 11rem);
-      font-weight: 800;
-      letter-spacing: -0.05em;
-      line-height: 1;
-    }
-    .notfound__eyebrow { justify-content: center; margin-bottom: 8px; }
-    .notfound__eyebrow::before { display: none; }
-    .notfound__title { margin-top: 10px; font-size: clamp(1.5rem, 3.4vw, 2.1rem); }
-    .notfound__text { margin: 14px auto 0; max-width: 46ch; color: var(--text-muted); }
-    .notfound__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 32px; }
-  </style>
-
-  <!-- Apply saved theme before paint to avoid a flash -->
-  <script>
-    (function () {
-      try {
-        var t = localStorage.getItem("theme");
-        if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
-      } catch (e) {}
-    })();
-  </script>
+  <!-- Applies the saved theme before paint and blocks framing by other sites -->
+  <script src="/js/theme.js"></script>
 </head>
 
 <body>

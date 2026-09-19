@@ -6,7 +6,8 @@
    remove, or reorder items without touching the HTML.
    ===================================================================== */
 
-const DEVICON = "https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons";
+// Skill icons are self-hosted (from Devicon, MIT) so the site loads nothing from third-party CDNs.
+const ICONS = "assets/icons";
 
 const PORTFOLIO = {
   /* ---------------- Personal info ---------------- */
@@ -61,11 +62,11 @@ const PORTFOLIO = {
       category: "Programming Languages",
       icon: "code",
       items: [
-        { name: "JavaScript", icon: `${DEVICON}/javascript/javascript-original.svg` },
-        { name: "Python", icon: `${DEVICON}/python/python-original.svg` },
-        { name: "Java", icon: `${DEVICON}/java/java-original.svg` },
-        { name: "C++", icon: `${DEVICON}/cplusplus/cplusplus-original.svg` },
-        { name: "C", icon: `${DEVICON}/c/c-original.svg` },
+        { name: "JavaScript", icon: `${ICONS}/javascript-original.svg` },
+        { name: "Python", icon: `${ICONS}/python-original.svg` },
+        { name: "Java", icon: `${ICONS}/java-original.svg` },
+        { name: "C++", icon: `${ICONS}/cplusplus-original.svg` },
+        { name: "C", icon: `${ICONS}/c-original.svg` },
         { name: "SQL", icon: null, badge: "SQL" },
       ],
     },
@@ -73,40 +74,40 @@ const PORTFOLIO = {
       category: "Front-End",
       icon: "layout",
       items: [
-        { name: "HTML5", icon: `${DEVICON}/html5/html5-original.svg` },
-        { name: "CSS3", icon: `${DEVICON}/css3/css3-original.svg` },
-        { name: "JavaScript", icon: `${DEVICON}/javascript/javascript-original.svg` },
-        { name: "React", icon: `${DEVICON}/react/react-original.svg` },
-        { name: "Bootstrap", icon: `${DEVICON}/bootstrap/bootstrap-original.svg` },
-        { name: "Tailwind CSS", icon: `${DEVICON}/tailwindcss/tailwindcss-original.svg` },
+        { name: "HTML5", icon: `${ICONS}/html5-original.svg` },
+        { name: "CSS3", icon: `${ICONS}/css3-original.svg` },
+        { name: "JavaScript", icon: `${ICONS}/javascript-original.svg` },
+        { name: "React", icon: `${ICONS}/react-original.svg` },
+        { name: "Bootstrap", icon: `${ICONS}/bootstrap-original.svg` },
+        { name: "Tailwind CSS", icon: `${ICONS}/tailwindcss-original.svg` },
       ],
     },
     {
       category: "Back-End",
       icon: "server",
       items: [
-        { name: "Node.js", icon: `${DEVICON}/nodejs/nodejs-original.svg` },
-        { name: "Express.js", icon: `${DEVICON}/express/express-original.svg`, invert: true },
+        { name: "Node.js", icon: `${ICONS}/nodejs-original.svg` },
+        { name: "Express.js", icon: `${ICONS}/express-original.svg`, invert: true },
       ],
     },
     {
       category: "Database",
       icon: "database",
       items: [
-        { name: "MySQL", icon: `${DEVICON}/mysql/mysql-original.svg` },
-        { name: "PostgreSQL", icon: `${DEVICON}/postgresql/postgresql-original.svg` },
-        { name: "MongoDB", icon: `${DEVICON}/mongodb/mongodb-original.svg` },
+        { name: "MySQL", icon: `${ICONS}/mysql-original.svg` },
+        { name: "PostgreSQL", icon: `${ICONS}/postgresql-original.svg` },
+        { name: "MongoDB", icon: `${ICONS}/mongodb-original.svg` },
       ],
     },
     {
       category: "Tools & Workflow",
       icon: "tool",
       items: [
-        { name: "Git", icon: `${DEVICON}/git/git-original.svg` },
-        { name: "GitHub", icon: `${DEVICON}/github/github-original.svg`, invert: true },
-        { name: "VS Code", icon: `${DEVICON}/vscode/vscode-original.svg` },
+        { name: "Git", icon: `${ICONS}/git-original.svg` },
+        { name: "GitHub", icon: `${ICONS}/github-original.svg`, invert: true },
+        { name: "VS Code", icon: `${ICONS}/vscode-original.svg` },
         { name: "REST APIs", icon: null, badge: "API" },
-        { name: "Postman", icon: `${DEVICON}/postman/postman-original.svg` },
+        { name: "Postman", icon: `${ICONS}/postman-original.svg` },
       ],
     },
   ],

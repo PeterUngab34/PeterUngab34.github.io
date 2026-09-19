@@ -13,6 +13,8 @@ Built with semantic HTML, modern CSS, and vanilla JavaScript — no build step r
 - Contact form with validation, spam honeypot, and Formspree support (falls back to `mailto:`)
 - Scroll-reveal animations that respect `prefers-reduced-motion`
 - SEO metadata, Open Graph / Twitter cards, favicon, accessible markup (skip link, ARIA, focus states)
+- Hardened for static hosting: strict Content-Security-Policy, zero third-party requests (fonts and
+  icons are self-hosted), URL allow-listing, clickjacking guard, and a readable no-JavaScript fallback
 
 ## Folder structure
 
@@ -23,15 +25,20 @@ MyPortfolio/
 ├── css/styles.css              # All styles (design tokens at the top)
 ├── js/data.js                  # ← YOUR CONTENT: edit this file
 ├── js/main.js                  # Rendering + interactions
+├── js/theme.js                 # Runs before paint: saved theme, clickjacking guard, no-JS failsafe
 ├── resume/                     # Resume source (resume.html) + PDF build script
 ├── assets/
 │   ├── favicon.svg
+│   ├── fonts/                  # self-hosted Sora, Inter, JetBrains Mono (WOFF2, SIL OFL)
+│   ├── icons/                  # self-hosted skill icons (Devicon, MIT)
 │   ├── apple-touch-icon.png    # 180×180 home-screen icon
 │   ├── resume.pdf              # built from resume/ with `node resume/build-resume.mjs`
 │   ├── images/
 │   │   ├── profile-placeholder.svg   # ← replace with your photo
 │   │   └── og-image.png              # social share preview (1200×630)
 │   └── projects/               # ← project screenshots
+├── .well-known/security.txt    # how to report a security issue (RFC 9116)
+├── .nojekyll                   # serve files as-is (needed for .well-known/)
 ├── robots.txt
 ├── sitemap.xml
 └── README.md
@@ -56,7 +63,9 @@ MyPortfolio/
    when the array is empty. Leave `profile.linkedin` (or any social) as `""` to hide its icon.
 8. **Social preview image** – replace `assets/images/og-image.png` (1200×630) with one showing your name.
 9. **Colors & type** – change `--accent`, `--accent-2`, and `--gradient` at the top of `css/styles.css`.
-   Headings use Sora, body text Inter, and code JetBrains Mono (loaded from Google Fonts).
+   Headings use Sora, body text Inter, and code JetBrains Mono (self-hosted in `assets/fonts/`).
+10. **Skill icons** – drop an SVG into `assets/icons/` and point the skill's `icon` at it
+    (`${ICONS}/name.svg`). Icons from other websites are blocked by the security policy.
 
 ### Contact form
 
@@ -72,15 +81,35 @@ To receive messages directly in your inbox without that step:
 Set `integrations.githubUsername` in `js/data.js` to show your latest public (non-fork) repositories
 under the "Want to see more of my work?" banner.
 
+## Security
+
+GitHub Pages cannot send custom HTTP headers, so the policy lives in a `<meta>` tag at the top of
+`index.html` and `404.html`:
+
+- **Content-Security-Policy** – `default-src 'none'`; scripts, styles, images and fonts only from this
+  site; no inline scripts or styles; `fetch` only to `api.github.com` and `formspree.io`;
+  `form-action 'none'` and `base-uri 'none'`. An injected script cannot run or send data anywhere.
+- **No third parties** – nothing is loaded from a CDN, so there is no supply-chain or tracking exposure.
+- **URL allow-list** – `safeUrl()` in `js/main.js` only lets `http(s)`, `mailto` and relative URLs
+  become links or image sources, including data returned by the GitHub API. All text is HTML-escaped.
+- **Clickjacking** – `js/theme.js` refuses to render inside another site's frame.
+- **Transport** – HTTPS is enforced by GitHub Pages with HSTS; the contact form refuses non-HTTPS endpoints.
+
+Keep it working: do not add inline `<script>`, `<style>`, `style=""` or `onclick=""` — put code in
+`js/` and `css/`. If you switch contact-form provider, add its origin to `connect-src`. Renew the
+`Expires` date in `.well-known/security.txt` once a year.
+
 ## Run locally
 
-Open `index.html` directly in a browser, or serve the folder (recommended):
+Serve the folder (recommended — this matches how the live site behaves):
 
 ```bash
 npx serve .
 # or
 python -m http.server 8000
 ```
+
+Opening `index.html` straight from disk also works; the browser just logs a harmless font-preload warning.
 
 ## Deploy (free)
 

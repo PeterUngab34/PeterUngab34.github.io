@@ -1,0 +1,12 @@
+The fonts in this folder are Latin-subset WOFF2 builds, self-hosted unmodified from Google Fonts.
+All three are licensed under the SIL Open Font License, Version 1.1 (https://openfontlicense.org).
+
+  sora-latin.woff2            Sora            Copyright 2019 The Sora Project Authors
+                                              https://github.com/sora-xor/sora-font
+  inter-latin.woff2           Inter           Copyright 2016 The Inter Project Authors
+                                              https://github.com/rsms/inter
+  jetbrains-mono-latin.woff2  JetBrains Mono  Copyright 2020 The JetBrains Mono Project Authors
+                                              https://github.com/JetBrains/JetBrainsMono
+
+The skill icons in ../icons are from Devicon (https://devicon.dev), MIT License.
+Logos remain trademarks of their respective owners.

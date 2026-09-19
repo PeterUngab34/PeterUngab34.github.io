@@ -4,6 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- ========== Security ==========
+       GitHub Pages cannot send custom HTTP headers, so the policy is declared here.
+       Everything is self-hosted: no inline scripts or styles, no third-party CDNs.
+       connect-src lists the only two APIs the page may call (GitHub repos, contact form).
+       If you change the contact form provider, add its origin to connect-src. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src https://api.github.com https://formspree.io; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+
   <!-- ========== SEO ========== -->
   <title>Peter Paul Ungab | Software Engineer Portfolio</title>
   <meta name="description" content="Peter Paul Ungab — Computer Engineering student and full-stack developer in Digos City, Philippines. React, Node.js, Java and SQL projects with live demos." />
@@ -56,28 +64,26 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 
-  <!-- Fonts: Sora (display) · Inter (body) · JetBrains Mono (code) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- Loaded without blocking first paint; system fonts show until the swap -->
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" /></noscript>
+  <!-- Fonts: Sora (display) · Inter (body) · JetBrains Mono (code), self-hosted via @font-face in styles.css.
+       The two above-the-fold families are preloaded; system fonts show until the swap. -->
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/sora-latin.woff2" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/inter-latin.woff2" crossorigin />
 
   <link rel="stylesheet" href="css/styles.css" />
 
-  <!-- Apply saved theme before paint to avoid a flash -->
-  <script>
-    (function () {
-      try {
-        var t = localStorage.getItem("theme");
-        if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
-      } catch (e) {}
-    })();
-  </script>
+  <!-- Applies the saved theme before paint (no flash) and blocks framing by other sites -->
+  <script src="js/theme.js"></script>
 </head>
 
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+  <noscript>
+    <p class="noscript">
+      This site uses JavaScript to show my skills and projects. You can still
+      <a href="assets/resume.pdf">read my resume</a> or browse
+      <a href="https://github.com/PeterUngab34" rel="noopener noreferrer">my code on GitHub</a>.
+    </p>
+  </noscript>
   <div class="progress" id="scrollProgress" aria-hidden="true"></div>
 
   <!-- ========== NAVIGATION ========== -->
@@ -98,7 +104,7 @@
         <li><a href="#education" class="nav__link">Education</a></li>
         <li><a href="#contact" class="nav__link">Contact</a></li>
         <li class="nav__mobile-resume">
-          <a href="assets/resume.pdf" class="btn btn--primary btn--block" download data-bind-href="resume">
+          <a href="assets/resume.pdf" class="btn btn--primary btn--block" download="Peter-Paul-Ungab-Resume.pdf" data-bind-href="resume">
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
             Download Resume
           </a>
@@ -110,7 +116,7 @@
           <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
           <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
-        <a href="assets/resume.pdf" class="btn btn--primary btn--sm nav__resume" download data-bind-href="resume">
+        <a href="assets/resume.pdf" class="btn btn--primary btn--sm nav__resume" download="Peter-Paul-Ungab-Resume.pdf" data-bind-href="resume">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
           Resume
         </a>
@@ -149,7 +155,7 @@
               View My Projects
               <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
-            <a href="assets/resume.pdf" class="btn btn--outline" download data-bind-href="resume">
+            <a href="assets/resume.pdf" class="btn btn--outline" download="Peter-Paul-Ungab-Resume.pdf" data-bind-href="resume">
               <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
               Download Resume
             </a>
