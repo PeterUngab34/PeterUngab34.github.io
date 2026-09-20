@@ -35,21 +35,10 @@
     if (!root.classList.contains("is-ready")) root.classList.remove("js");
   });
 
-  // Apply the saved theme before paint to avoid a flash. The key is namespaced
-  // because every project under this github.io origin shares one localStorage.
+  // The site is dark-only now; clear the theme choice saved by earlier versions.
   try {
-    var KEY = "portfolio.theme";
-    var theme = localStorage.getItem(KEY);
-    if (!theme) {
-      theme = localStorage.getItem("theme"); // pre-namespace key
-      if (theme === "light" || theme === "dark") localStorage.setItem(KEY, theme);
-      localStorage.removeItem("theme");
-    }
-    // No saved choice: follow the operating system (paper by day, graphite by night)
-    if (theme !== "light" && theme !== "dark") {
-      theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    }
-    root.setAttribute("data-theme", theme);
+    localStorage.removeItem("portfolio.theme");
+    localStorage.removeItem("theme");
   } catch (e) {
     /* storage unavailable */
   }

@@ -1,30 +1,36 @@
 # Developer Portfolio
 
-A fast, responsive, dependency-free personal portfolio, designed as an **engineering datasheet**:
-title block, spec tables, numbered figures. Built with semantic HTML, modern CSS, and vanilla
+A fast, responsive, dependency-free personal portfolio in a **"Red Noir"** style: pure black, one red
+accent, glass cards, and a drifting starfield. Built with semantic HTML, modern CSS, and vanilla
 JavaScript — no frameworks, no build step, no third-party requests.
 
 ## Design
 
-The site deliberately avoids the usual developer-portfolio kit (gradients, glow, fake code windows,
-floating cards). Instead it borrows the structure of a component datasheet:
-
-- **Surfaces** – warm drafting paper (light) and graphite (dark); the theme follows the visitor's
-  system setting until they choose one.
-- **Ink and rules** – hairline borders instead of shadows, square corners, one signal-orange accent.
-- **Type** – IBM Plex Sans (condensed for headings) and IBM Plex Mono for labels and data.
-- **Structure** – an "At a glance" spec table in the hero, skills as a pin table, projects as numbered
-  figure sheets with Type / Stack / Tests rows, experience and repositories as ruled tables, and a
-  drawing-style title block as the footer. "Rev." shows the month the page was last deployed.
-- **Print** – `Ctrl+P` produces a clean paper document.
-
-All colors pass WCAG AA (4.5:1) in both themes.
+- **Surfaces** – pure black (`#000`) with a dark-red wash (`#120101`) and two soft red glow orbs.
+  Dark only; there is no light theme.
+- **Accent** – one red, `#ef233c`, for calls to action, highlights and glows (`--red-text` is the same
+  red lifted slightly so small text passes WCAG AA on black).
+- **Glass** – cards are 3% white with a hairline border, a lit top edge and 24px corners; the border
+  turns red on hover and a soft red spotlight follows the pointer inside the card. Buttons, tags and
+  the navigation are pills; primary buttons get a light sweep on hover and lean towards the pointer.
+- **Type** – Manrope (600–800, tight tracking) for headings, Inter for text, the system monospace for
+  small technical labels. Both fonts are self-hosted.
+- **Backdrop** – a two-layer starfield, red orbs, a masked grid in the hero, a large glow that eases
+  after the pointer, and a 4% film grain (`assets/noise.svg`), all plain CSS (tiled
+  `radial-gradient`s moved with one `transform` animation — no canvas, no bitmaps).
+- **Layout** – a 1280px container, 128px section padding, and asymmetric bento grids for About,
+  Skills and Projects.
+- **Motion** – `cubic-bezier(0.16, 1, 0.3, 1)` fade-ups and hovers, a blur-in hero, a highlight that
+  drifts across the red name, a glint circling the photo frame, and a scroll-linked hero exit where
+  the browser supports scroll timelines. Pointer effects are desktop-only; everything stops under
+  `prefers-reduced-motion`. `Ctrl+P` prints black on white.
 
 ## Features
 
-- Paper and graphite themes: follows the system setting, with a toggle that remembers the visitor's choice
-- Sticky navigation with active-section highlighting and a mobile hamburger menu
-- Hero with an "At a glance" spec table, key figures, resume download, and social links
+- Floating glass navigation pill with a sliding active-section marker, and a full-screen mobile menu
+- Hero with availability badge, key figures, resume download, and social links
+- Project screenshots framed as browser windows, with the demo address and test count in the title bar
+- Contact card with a live local-time clock and a copy-to-clipboard email button
 - Data-driven sections: About, Skills, Projects, GitHub, Experience, Education, Certifications, Services, Contact
 - Optional live GitHub repositories (via the public GitHub API)
 - Contact form with validation, spam honeypot, and Formspree support (falls back to `mailto:`)
@@ -42,11 +48,11 @@ MyPortfolio/
 ├── css/styles.css              # All styles (design tokens at the top)
 ├── js/data.js                  # ← YOUR CONTENT: edit this file
 ├── js/main.js                  # Rendering + interactions
-├── js/theme.js                 # Runs before paint: saved theme, clickjacking guard, no-JS failsafe
+├── js/boot.js                  # Runs before paint: clickjacking guard, no-JS failsafe
 ├── resume/                     # Resume source (resume.html) + PDF build script
 ├── assets/
 │   ├── favicon.svg
-│   ├── fonts/                  # self-hosted IBM Plex Sans + IBM Plex Mono (WOFF2, SIL OFL)
+│   ├── fonts/                  # self-hosted Manrope + Inter (variable WOFF2, SIL OFL)
 │   ├── icons/                  # self-hosted skill icons (Devicon, MIT)
 │   ├── apple-touch-icon.png    # 180×180 home-screen icon
 │   ├── resume.pdf              # built from resume/ with `node resume/build-resume.mjs`
@@ -64,7 +70,7 @@ MyPortfolio/
 ## Customize it
 
 1. **Your details** – open `js/data.js` and edit `profile` (name, initials, email, GitHub, LinkedIn…)
-   and the `glance` rows shown in the hero's "At a glance" table.
+   and the `glance` rows shown in the About section's "At a glance" card.
 2. **SEO tags** – in `index.html`, replace `Your Name` and `https://your-domain.com/` in the `<head>`
    (title, description, Open Graph, canonical URL). These are read by search engines and social sites
    before JavaScript runs, so they must be edited in the HTML.
@@ -73,16 +79,17 @@ MyPortfolio/
 5. **Projects** – edit the `projects` array. Add screenshots (16:10, e.g. 1280×800) to `assets/projects/`
    and point `image` to them (PNG for flat UI, WebP for photo- or gradient-heavy shots — whichever
    is smaller). Set `github` or `demo` to `""` to hide that button; add `download` for an extra
-   "Download" button; `type` and `tests` fill the project's spec rows; `featured: true` makes a
-   project span the full width.
+   "Download" button; `type` is the label after the card number and `tests` is the badge on the
+   screenshot. Cards form a bento grid in array order: wide + narrow, narrow + wide, and an odd
+   last card spans the full row.
 6. **Skills, experience, education, certifications, services** – edit the matching arrays.
-   Setting `certifications: []` hides that section entirely. Skills also feed the scrolling
-   technology ticker under the hero.
+   Setting `certifications: []` hides that section entirely. For a dark-colored skill logo, add
+   `invert: true` (black logos) or `lighten: true` so it stays visible on the black background.
 7. **Hero stats** – edit the `stats` array (value + label). They count up on load and are hidden
    when the array is empty. Leave `profile.linkedin` (or any social) as `""` to hide its icon.
 8. **Social preview image** – replace `assets/images/og-image.png` (1200×630) with one showing your name.
-9. **Colors & type** – edit the tokens at the top of `css/styles.css` (`--bg`, `--text`, `--accent`… for
-   paper, and the `[data-theme="dark"]` block for graphite). Fonts are self-hosted in `assets/fonts/`.
+9. **Colors & type** – edit the tokens at the top of `css/styles.css` (`--bg`, `--red`, `--card`,
+   `--text`…). Fonts are self-hosted in `assets/fonts/`.
 10. **Skill icons** – drop an SVG into `assets/icons/` and point the skill's `icon` at it
     (`${ICONS}/name.svg`). Icons from other websites are blocked by the security policy.
 
@@ -98,7 +105,7 @@ To receive messages directly in your inbox without that step:
 ### GitHub repositories
 
 Set `integrations.githubUsername` in `js/data.js` to show your latest public (non-fork) repositories
-under the "Want to see more of my work?" banner.
+under the "More on GitHub" banner.
 
 ## Security
 
@@ -111,7 +118,7 @@ GitHub Pages cannot send custom HTTP headers, so the policy lives in a `<meta>` 
 - **No third parties** – nothing is loaded from a CDN, so there is no supply-chain or tracking exposure.
 - **URL allow-list** – `safeUrl()` in `js/main.js` only lets `http(s)`, `mailto` and relative URLs
   become links or image sources, including data returned by the GitHub API. All text is HTML-escaped.
-- **Clickjacking** – `js/theme.js` refuses to render inside another site's frame.
+- **Clickjacking** – `js/boot.js` refuses to render inside another site's frame.
 - **Transport** – HTTPS is enforced by GitHub Pages with HSTS; the contact form refuses non-HTTPS endpoints.
 
 Keep it working: do not add inline `<script>`, `<style>`, `style=""` or `onclick=""` — put code in

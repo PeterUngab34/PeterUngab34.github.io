@@ -48,7 +48,13 @@
     star: '<path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>',
     fork: '<circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M6 8v1a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V8M12 12v4"/>',
     mail: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>',
+    chevron: '<path d="m9 18 6-6-6-6"/>',
+    repo: '<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>',
   };
+  // Pointer-driven effects only make sense with a mouse or trackpad. The card spotlight is a hover
+  // effect and stays on; the effects that actually move things also respect prefers-reduced-motion.
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const pointerMotion = finePointer && !prefersReducedMotion;
   const icon = (name, cls = "icon") =>
     `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${PATHS[name] || PATHS.code}</svg>`;
 
@@ -80,11 +86,22 @@
       if (value) el.setAttribute("alt", value);
     });
     document.title = `${profile.name} | Software Engineer Portfolio`;
-    // "Rev." is the month this copy of the page was last deployed
-    const modified = new Date(document.lastModified);
-    if (!Number.isNaN(modified.getTime())) {
-      const rev = `${modified.getFullYear()}.${String(modified.getMonth() + 1).padStart(2, "0")}`;
-      $$("[data-rev]").forEach((el) => (el.textContent = rev));
+
+    // The last name carries the red accent: gradient in the hero, solid in the logo wordmark
+    const words = String(profile.name || "").trim().split(/\s+/).filter(Boolean);
+    if (words.length > 1) {
+      const last = esc(words[words.length - 1]);
+      const hero = $("[data-hero-name]");
+      if (hero) hero.innerHTML = `${esc(words.slice(0, -1).join(" "))} <span class="text-gradient">${last}</span>`;
+      $$("[data-wordmark]").forEach((el) => (el.innerHTML = `${esc(words[0])} <span>${last}</span>`));
+    }
+    // "Software Engineer | Full-Stack Developer" → two labels split by a red dot
+    const role = $("[data-hero-role]");
+    if (role && profile.role) {
+      role.innerHTML = String(profile.role)
+        .split("|")
+        .map((part) => `<span>${esc(part.trim())}</span>`)
+        .join('<span class="sep" aria-hidden="true"></span>');
     }
     const year = $("#year");
     if (year) year.textContent = new Date().getFullYear();
@@ -107,17 +124,14 @@
     $$("[data-socials]").forEach((ul) => (ul.innerHTML = html));
   }
 
-  /* ---------------- Hero "At a glance" table ---------------- */
+  /* ---------------- About: "At a glance" card ---------------- */
   function renderGlance() {
     const el = $("[data-glance]");
     if (!el || !Array.isArray(data.glance)) return;
-    const rows = data.glance.map((r) => `<div><dt>${esc(r.label)}</dt><dd>${esc(r.value)}</dd></div>`);
-    if (profile.availabilityShort) {
-      rows.push(
-        `<div><dt>Status</dt><dd class="spec__status"><span class="status-dot" aria-hidden="true"></span>${esc(profile.availabilityShort)}</dd></div>`
-      );
-    }
-    el.innerHTML = rows.join("");
+    el.innerHTML = data.glance.map((r) => `<div><dt>${esc(r.label)}</dt><dd>${esc(r.value)}</dd></div>`).join("");
+    // The status pill in the card header is bound to profile.availabilityShort; hide it when that is empty
+    const status = $("[data-glance-status]");
+    if (status) status.hidden = !profile.availabilityShort;
   }
 
   /* ---------------- Hero stats (count-up) ---------------- */
@@ -164,7 +178,7 @@
   function skillIcon(item) {
     if (item.icon) {
       return `<img src="${esc(safeUrl(item.icon))}" alt="" width="22" height="22" loading="lazy" decoding="async" class="skill__img${
-        item.invert ? " skill__img--invert" : ""
+        item.invert ? " skill__img--invert" : item.lighten ? " skill__img--lighten" : ""
       }" data-fallback="${esc(item.badge || item.name.slice(0, 2))}" />`;
     }
     return `<span class="skill__badge">${esc(item.badge || item.name.slice(0, 2))}</span>`;
@@ -188,10 +202,14 @@
     el.innerHTML = data.skills
       .map(
         (group) => `
-        <section class="skill-row reveal" aria-label="${esc(group.category)}">
-          <header class="skill-row__head">
-            <h3>${esc(group.category)}</h3>
-            <span class="skill-row__count" aria-hidden="true">${String(group.items.length).padStart(2, "0")}</span>
+        <section class="skill-card glass-card glass-card--lift reveal" aria-label="${esc(group.category)}">
+          <span class="card-watermark" aria-hidden="true">${icon(group.icon)}</span>
+          <header class="skill-card__head">
+            <span class="icon-tile" aria-hidden="true">${icon(group.icon)}</span>
+            <div>
+              <h3>${esc(group.category)}</h3>
+              <p class="skill-card__count">${String(group.items.length).padStart(2, "0")} ${group.items.length === 1 ? "skill" : "skills"}</p>
+            </div>
           </header>
           <ul class="skill-list">
             ${group.items
@@ -204,6 +222,23 @@
     guardIcons(el);
   }
 
+
+  // "https://PeterUngab34.github.io/task-manager/" → "peterungab34.github.io/task-manager"
+  const urlLabel = (url) => {
+    try {
+      const u = new URL(url, document.baseURI);
+      return (u.host + u.pathname).replace(/\/$/, "");
+    } catch (e) {
+      return "";
+    }
+  };
+
+  // Bento rhythm: rows alternate wide+narrow / narrow+wide; an odd last card spans the full row
+  function bentoSpan(i, total) {
+    if (total % 2 === 1 && i === total - 1) return 12;
+    const wideFirst = Math.floor(i / 2) % 2 === 0;
+    return (i % 2 === 0) === wideFirst ? 8 : 4;
+  }
 
   function renderProjects() {
     const el = $("[data-projects]");
@@ -218,34 +253,32 @@
         };
         const link = p.demo || p.github;
         const viewLabel = p.demo ? p.demoLabel || "Open live demo" : "View source";
-        const media = `<img src="${esc(safeUrl(p.image))}" alt="Screenshot of ${esc(p.title)}" loading="lazy" decoding="async" width="1280" height="800" />`;
-        const specs = [
-          ["Type", esc(p.type || "")],
-          [
-            "Stack",
-            `<ul class="chip-list" aria-label="Technologies used">${p.tech.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>`,
-          ],
-          ["Tests", esc(p.tests || "")],
-        ].filter(([, value]) => value);
+        // Browser-window chrome over the screenshot: three dots, the address of the demo, the test badge
+        const media = `<span class="browser-bar" aria-hidden="true">
+              <span class="browser-bar__dots"><span></span><span></span><span></span></span>
+              ${link ? `<span class="browser-bar__url">${esc(urlLabel(link))}</span>` : ""}
+              ${p.tests ? `<span class="pill bento-item__tests">${icon("check")} ${esc(p.tests)}</span>` : ""}
+            </span>
+            <img src="${esc(safeUrl(p.image))}" alt="Screenshot of ${esc(p.title)}" loading="lazy" decoding="async" width="1280" height="800" />`;
+        const index = String(i + 1).padStart(2, "0");
         return `
-        <article class="project reveal${p.featured ? " project--featured" : ""}">
-          <figure class="figure project__figure">
-            ${
-              link
-                ? `<a class="figure__frame project__media" href="${esc(link)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(viewLabel)}: ${esc(p.title)}" tabindex="-1">${media}</a>`
-                : `<div class="figure__frame project__media">${media}</div>`
-            }
-            <figcaption class="figure__caption"><span>Fig. ${String(i + 1).padStart(2, "0")}</span> ${esc(p.title)}</figcaption>
-          </figure>
-          <div class="project__body">
-            <h3 class="project__title">${esc(p.title)}</h3>
-            <p class="project__desc">${esc(p.description)}</p>
-            <dl class="project__specs">
-              ${specs.map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`).join("")}
-            </dl>
+        <article class="bento-item bento-item--${bentoSpan(i, data.projects.length)} reveal">
+          ${
+            link
+              ? `<a class="bento-item__media" href="${esc(link)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(viewLabel)}: ${esc(p.title)}" tabindex="-1">${media}</a>`
+              : `<div class="bento-item__media">${media}</div>`
+          }
+          <div class="bento-item__body">
+            <span class="bento-item__index">${index}${p.type ? ` / ${esc(p.type)}` : ""}</span>
+            <h3 class="bento-item__title">${esc(p.title)}</h3>
+            <p class="bento-item__desc">${esc(p.description)}</p>
+            <ul class="chip-list" aria-label="Technologies used">${p.tech.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
             ${
               p.features && p.features.length
-                ? `<ul class="project__features">${p.features.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>`
+                ? `<details class="bento-item__more">
+                    <summary>${icon("chevron")} Key features</summary>
+                    <ul class="bento-item__features">${p.features.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>
+                  </details>`
                 : ""
             }
             <div class="project__actions">
@@ -278,13 +311,17 @@
       .map(
         (x) => `
         <li class="timeline__item reveal">
-          <div class="timeline__meta">
-            <p class="timeline__period">${esc(x.period)}</p>
-            ${x.type ? `<p class="timeline__type">${esc(x.type)}</p>` : ""}
-          </div>
-          <article class="timeline__main">
-            <h3 class="timeline__role">${esc(x.role)}</h3>
-            <p class="timeline__org">${esc(x.org)}</p>
+          <article class="timeline__card glass-card">
+            <header class="timeline__head">
+              <div>
+                <h3 class="timeline__role">${esc(x.role)}</h3>
+                <p class="timeline__org">${esc(x.org)}</p>
+              </div>
+              <p class="timeline__meta">
+                <span class="pill pill--red">${esc(x.period)}</span>
+                ${x.type ? `<span class="pill">${esc(x.type)}</span>` : ""}
+              </p>
+            </header>
             <ul class="timeline__points">
               ${x.points.map((pt) => `<li>${esc(pt)}</li>`).join("")}
             </ul>
@@ -300,17 +337,18 @@
     el.innerHTML = data.education
       .map(
         (e) => `
-        <article class="edu reveal">
+        <article class="edu glass-card reveal">
           <div class="edu__main">
+            <span class="icon-tile" aria-hidden="true">${icon("cap")}</span>
             <p class="edu__degree">${esc(e.degree)}</p>
             <h3 class="edu__program">${esc(e.program)}</h3>
             <p class="edu__school">${esc(e.school)}</p>
-            <p class="edu__period">${esc(e.period)}</p>
+            <p class="pill pill--red edu__period">${esc(e.period)}</p>
           </div>
           ${
             e.coursework && e.coursework.length
               ? `<div class="edu__courses">
-                  <h4>Relevant coursework</h4>
+                  <h4 class="card-label">Relevant coursework</h4>
                   <ul class="tag-list">${e.coursework.map((c) => `<li class="tag">${esc(c)}</li>`).join("")}</ul>
                 </div>`
               : ""
@@ -330,13 +368,14 @@
     el.innerHTML = data.certifications
       .map(
         (c) => `
-        <article class="cert reveal">
+        <article class="cert glass-card glass-card--lift reveal">
+          <span class="icon-tile" aria-hidden="true">${icon("award")}</span>
           <p class="cert__date">${esc(c.date)}</p>
           <h3 class="cert__name">${esc(c.name)}</h3>
           <p class="cert__org">${esc(c.org)}</p>
           ${
             safeUrl(c.url)
-              ? `<a class="link-arrow" href="${esc(safeUrl(c.url))}" target="_blank" rel="noopener noreferrer">View Certificate ${icon("external")}</a>`
+              ? `<a class="link-arrow" href="${esc(safeUrl(c.url))}" target="_blank" rel="noopener noreferrer">View certificate ${icon("arrow")}</a>`
               : ""
           }
         </article>`
@@ -344,7 +383,7 @@
       .join("");
   }
 
-  // Keep the "01 · About" eyebrow numbers sequential when a section is hidden
+  // Keep the "01 / About" eyebrow numbers sequential when a section is hidden
   function numberSections() {
     let n = 0;
     $$("main > section:not([hidden]) .section__eyebrow").forEach((el) => {
@@ -358,9 +397,10 @@
     if (!el) return;
     el.innerHTML = data.services
       .map(
-        (s, i) => `
-        <article class="service reveal">
-          <span class="service__index" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
+        (s) => `
+        <article class="service glass-card glass-card--lift reveal">
+          <span class="card-watermark" aria-hidden="true">${icon(s.icon)}</span>
+          <span class="icon-tile" aria-hidden="true">${icon(s.icon)}</span>
           <h3>${esc(s.title)}</h3>
           <p>${esc(s.text)}</p>
         </article>`
@@ -389,8 +429,8 @@
       grid.innerHTML = repos
         .map(
           (r) => `
-          <a class="repo" href="${esc(safeUrl(r.html_url))}" target="_blank" rel="noopener noreferrer">
-            <h4 class="repo__name"><span>${esc(r.name)}</span></h4>
+          <a class="repo glass-card glass-card--lift" href="${esc(safeUrl(r.html_url))}" target="_blank" rel="noopener noreferrer">
+            <h4 class="repo__name">${icon("repo")}<span>${esc(r.name)}</span></h4>
             <p class="repo__desc">${esc(r.description || "No description provided.")}</p>
             <p class="repo__meta">
               <span>${esc(r.language || "—")}</span>
@@ -401,39 +441,10 @@
         )
         .join("");
       wrap.hidden = false;
+      initSpotlight(grid);
     } catch (err) {
       console.warn("Could not load GitHub repositories:", err);
     }
-  }
-
-  /* ---------------- Theme toggle ---------------- */
-  function initTheme() {
-    const btn = $("#themeToggle");
-    const root = document.documentElement;
-    const meta = $('meta[name="theme-color"]');
-    let fadeTimer;
-
-    const apply = (theme) => {
-      root.setAttribute("data-theme", theme);
-      btn.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
-      if (meta) meta.setAttribute("content", theme === "dark" ? "#111315" : "#f4f1ea");
-    };
-    apply(root.getAttribute("data-theme") || "light");
-
-    btn.addEventListener("click", () => {
-      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-      if (!prefersReducedMotion) {
-        root.classList.add("theme-fade");
-        clearTimeout(fadeTimer);
-        fadeTimer = setTimeout(() => root.classList.remove("theme-fade"), 450);
-      }
-      apply(next);
-      try {
-        localStorage.setItem("portfolio.theme", next);
-      } catch (e) {
-        /* storage unavailable */
-      }
-    });
   }
 
   /* ---------------- Navigation ---------------- */
@@ -442,9 +453,8 @@
     const toggle = $("#navToggle");
     const links = $("#navLinks");
     const navLinks = $$(".nav__link");
-    const progress = $("#scrollProgress");
     const backToTop = $("#backToTop");
-    const desktop = window.matchMedia("(min-width: 961px)");
+    const desktop = window.matchMedia("(min-width: 1101px)");
 
     const setOpen = (open) => {
       document.body.classList.toggle("nav-open", open);
@@ -503,7 +513,7 @@
         const y = window.scrollY;
         header.classList.toggle("is-scrolled", y > 10);
         const max = document.documentElement.scrollHeight - window.innerHeight;
-        if (progress) progress.style.setProperty("--p", max > 0 ? Math.min(y / max, 1).toFixed(4) : "0");
+        document.documentElement.style.setProperty("--p", max > 0 ? Math.min(y / max, 1).toFixed(4) : "0");
         if (backToTop) {
           const show = y > 700;
           backToTop.classList.toggle("is-visible", show);
@@ -530,6 +540,7 @@
           if (!entry.isIntersecting) return;
           const link = byId.get(entry.target.id);
           if (link) setActive(link);
+          else if (entry.target.id === "home") setActive(null);
         });
       },
       { rootMargin: "-45% 0px -50% 0px" }
@@ -553,8 +564,10 @@
       (entries, obs) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-visible");
-          obs.unobserve(entry.target);
+          const el = entry.target;
+          el.classList.add("is-visible");
+          obs.unobserve(el);
+          setTimeout(() => (el.style.transitionDelay = ""), 1400);
         });
       },
       { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
@@ -565,6 +578,104 @@
       const index = siblings.indexOf(el);
       if (index > 0) el.style.transitionDelay = `${Math.min(index, 6) * 70}ms`;
       observer.observe(el);
+    });
+  }
+
+  /* ---------------- Light that follows the pointer (desktop only) ----------------
+     Every effect here writes CSS custom properties through the CSSOM, which the
+     Content-Security-Policy allows (only inline style attributes are forbidden). */
+
+  // Inside each card: a red glow at the pointer position, faded in/out with --spot
+  function initSpotlight(root = document) {
+    if (!finePointer) return;
+    $$(".glass-card, .bento-item", root).forEach((card) => {
+      if (card.dataset.spot) return;
+      card.dataset.spot = "1";
+      card.addEventListener("pointermove", (e) => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+        card.style.setProperty("--my", `${e.clientY - r.top}px`);
+      });
+      card.addEventListener("pointerenter", () => card.style.setProperty("--spot", "1"));
+      card.addEventListener("pointerleave", () => card.style.setProperty("--spot", "0"));
+    });
+  }
+
+  // Buttons lean a few pixels towards the pointer while it is over them
+  function initMagnetic() {
+    if (!pointerMotion) return;
+    $$(".btn").forEach((btn) => {
+      btn.addEventListener("pointermove", (e) => {
+        const r = btn.getBoundingClientRect();
+        const x = (e.clientX - (r.left + r.width / 2)) * 0.22;
+        const y = (e.clientY - (r.top + r.height / 2)) * 0.32;
+        btn.style.setProperty("--tx", `${x.toFixed(1)}px`);
+        btn.style.setProperty("--ty", `${y.toFixed(1)}px`);
+      });
+      btn.addEventListener("pointerleave", () => {
+        btn.style.setProperty("--tx", "0px");
+        btn.style.setProperty("--ty", "0px");
+      });
+    });
+  }
+
+  // Backdrop: a large soft glow eases after the pointer
+  function initCursorGlow() {
+    const glow = $("#cursorGlow");
+    if (!glow || !pointerMotion) return;
+    let tx = window.innerWidth / 2, ty = window.innerHeight * 0.4, x = tx, y = ty, raf = 0;
+    const frame = () => {
+      x += (tx - x) * 0.12;
+      y += (ty - y) * 0.12;
+      glow.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
+      raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.3 ? requestAnimationFrame(frame) : 0;
+    };
+    window.addEventListener("pointermove", (e) => {
+      tx = e.clientX;
+      ty = e.clientY;
+      glow.classList.add("is-on");
+      if (!raf) raf = requestAnimationFrame(frame);
+    }, { passive: true });
+    document.addEventListener("pointerleave", () => glow.classList.remove("is-on"));
+  }
+
+  /* ---------------- Contact: live local time + copy email ---------------- */
+  function initClock() {
+    const els = $$("[data-local-time]");
+    if (!els.length) return;
+    const opts = { hour: "numeric", minute: "2-digit", hour12: true };
+    let fmt, offset = "";
+    try {
+      fmt = new Intl.DateTimeFormat("en-US", { ...opts, timeZone: profile.timeZone });
+      const part = new Intl.DateTimeFormat("en-US", { timeZone: profile.timeZone, timeZoneName: "shortOffset" })
+        .formatToParts(new Date())
+        .find((p) => p.type === "timeZoneName");
+      offset = part ? part.value : "";
+    } catch (e) {
+      fmt = new Intl.DateTimeFormat("en-US", opts); // unknown zone: fall back to the visitor's clock
+    }
+    const zone = $("[data-local-zone]");
+    if (zone) zone.textContent = offset;
+    const tick = () => els.forEach((el) => (el.textContent = fmt.format(new Date())));
+    tick();
+    setInterval(tick, 15000);
+  }
+
+  function initCopy() {
+    $$("[data-copy]").forEach((btn) => {
+      let timer;
+      btn.addEventListener("click", async () => {
+        const value = profile[btn.dataset.copy];
+        if (!value || !navigator.clipboard) return;
+        try {
+          await navigator.clipboard.writeText(value);
+          btn.classList.add("is-copied");
+          clearTimeout(timer);
+          timer = setTimeout(() => btn.classList.remove("is-copied"), 1800);
+        } catch (e) {
+          /* clipboard blocked: the address is selectable right beside the button */
+        }
+      });
     });
   }
 
@@ -643,7 +754,7 @@
         setStatus(`Sorry, something went wrong. Please email me directly at ${profile.email}.`, "error");
       } finally {
         button.disabled = false;
-        label.textContent = "Send Message";
+        label.textContent = "Send message";
       }
     });
   }
@@ -662,12 +773,16 @@
   renderServices();
   numberSections();
 
-  initTheme();
   initNav();
   initReveal();
   initContactForm();
+  initSpotlight();
+  initMagnetic();
+  initCursorGlow();
+  initClock();
+  initCopy();
   loadGitHubRepos();
 
-  // Tells js/theme.js that rendering finished (see the .js failsafe there)
+  // Tells js/boot.js that rendering finished (see the .js failsafe there)
   document.documentElement.classList.add("is-ready");
 })();

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,7 +18,8 @@
   <meta name="keywords" content="Software Engineer, Web Developer, Full-Stack Developer, Front-End Developer, Back-End Developer, JavaScript, React, Node.js, Python, Java, Portfolio, Philippines" />
   <meta name="author" content="Peter Paul Ungab" />
   <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#f4f1ea" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="color-scheme" content="dark" />
   <link rel="canonical" href="https://peterungab34.github.io/" />
 
   <!-- Open Graph / social sharing -->
@@ -64,15 +65,15 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 
-  <!-- Fonts: IBM Plex Sans (text + condensed display) · IBM Plex Mono (labels, data), self-hosted via
-       @font-face in styles.css. The two above-the-fold files are preloaded; system fonts show until the swap. -->
-  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/plex-sans-latin.woff2" crossorigin />
-  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/plex-mono-500-latin.woff2" crossorigin />
+  <!-- Fonts: Manrope (headings) · Inter (text), self-hosted via @font-face in styles.css.
+       Both are preloaded because both appear above the fold; system fonts show until the swap. -->
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/manrope-latin.woff2" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/inter-latin.woff2" crossorigin />
 
   <link rel="stylesheet" href="css/styles.css" />
 
-  <!-- Applies the saved theme before paint (no flash) and blocks framing by other sites -->
-  <script src="js/theme.js"></script>
+  <!-- Runs before paint: blocks framing by other sites, arms the scroll-reveal failsafe -->
+  <script src="js/boot.js"></script>
 </head>
 
 <body>
@@ -84,19 +85,31 @@
       <a href="https://github.com/PeterUngab34" rel="noopener noreferrer">my code on GitHub</a>.
     </p>
   </noscript>
+
+  <!-- Fixed backdrop: two starfield layers drifting at different speeds, red glow orbs,
+       a glow that follows the pointer (desktop only), and a film-grain layer — all CSS -->
+  <div class="backdrop" aria-hidden="true">
+    <div class="backdrop__stars backdrop__stars--far"></div>
+    <div class="backdrop__stars backdrop__stars--near"></div>
+    <div class="backdrop__orb backdrop__orb--a"></div>
+    <div class="backdrop__orb backdrop__orb--b"></div>
+    <div class="backdrop__glow" id="cursorGlow"></div>
+  </div>
   <div class="progress" id="scrollProgress" aria-hidden="true"></div>
 
   <!-- ========== NAVIGATION ========== -->
   <header class="site-header" id="siteHeader">
     <nav class="nav container" aria-label="Primary">
-      <a href="#home" class="nav__logo">
-        <span class="nav__logo-mark" data-bind="initials" aria-hidden="true">PU</span>
-        <span class="nav__logo-text" data-bind="name">Peter Paul Ungab</span>
+      <a href="#home" class="nav__logo" aria-label="Peter Paul Ungab — back to top">
+        <span class="nav__logo-mark" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>
+        </span>
+        <!-- Re-rendered from profile.name in js/data.js: first name + accented last name -->
+        <span class="nav__logo-text" data-wordmark>Peter <span>Ungab</span></span>
       </a>
 
       <ul class="nav__links" id="navLinks">
         <li class="nav__indicator" role="presentation" aria-hidden="true"></li>
-        <li><a href="#home" class="nav__link">Index</a></li>
         <li><a href="#about" class="nav__link">About</a></li>
         <li><a href="#skills" class="nav__link">Skills</a></li>
         <li><a href="#projects" class="nav__link">Projects</a></li>
@@ -105,20 +118,16 @@
         <li><a href="#contact" class="nav__link">Contact</a></li>
         <li class="nav__mobile-resume">
           <a href="assets/resume.pdf" class="btn btn--primary btn--block" download="Peter-Paul-Ungab-Resume.pdf" data-bind-href="resume">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
             Download resume
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
           </a>
         </li>
       </ul>
 
       <div class="nav__actions">
-        <button class="icon-btn" id="themeToggle" type="button" aria-label="Switch to dark mode">
-          <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-          <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        </button>
-        <a href="assets/resume.pdf" class="btn btn--primary btn--sm nav__resume" download="Peter-Paul-Ungab-Resume.pdf" data-bind-href="resume">
+        <a href="assets/resume.pdf" class="nav__resume" download="Peter-Paul-Ungab-Resume.pdf" data-bind-href="resume">
           Resume
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12M6 11l6 6 6-6M5 21h14"/></svg>
         </a>
         <button class="icon-btn nav__toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
           <span class="hamburger" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -128,72 +137,68 @@
   </header>
 
   <main id="main">
-    <!-- ========== HERO / TITLE SHEET ========== -->
+    <!-- ========== HERO ========== -->
     <section class="hero" id="home" aria-labelledby="heroTitle">
+      <div class="hero__grid" aria-hidden="true"></div>
       <div class="container hero__inner">
-        <div class="hero__content">
-          <p class="doc-line reveal">
-            <span>Datasheet</span>
-            <span data-bind="partNumber">PPU-2028</span>
-            <span>Rev. <span data-rev>2026.09</span></span>
-          </p>
-          <h1 class="hero__title reveal" id="heroTitle" data-bind="name">Peter Paul Ungab</h1>
-          <p class="hero__role reveal" data-bind="role">Software Engineer | Full-Stack Developer</p>
-          <p class="hero__desc reveal" data-bind="tagline">
-            Computer Engineering student who designs, builds, tests, and ships full-stack software.
-          </p>
+        <p class="badge reveal">
+          <span class="badge__dot" aria-hidden="true"><span></span></span>
+          <span data-bind="availabilityShort">Open to opportunities</span>
+        </p>
 
-          <div class="hero__cta reveal">
-            <a href="#projects" class="btn btn--primary">
-              View projects
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-            <a href="assets/resume.pdf" class="btn btn--outline" download="Peter-Paul-Ungab-Resume.pdf" data-bind-href="resume">
-              Download resume
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            </a>
-            <a href="#contact" class="link-arrow">Contact me</a>
-          </div>
+        <!-- Re-rendered from profile.name: the last name takes the red gradient -->
+        <h1 class="hero__title reveal" id="heroTitle" data-hero-name>Peter Paul <span class="text-gradient">Ungab</span></h1>
+        <!-- Re-rendered from profile.role: "A | B" becomes two labels with a red divider -->
+        <p class="hero__role reveal" data-hero-role>Software Engineer | Full-Stack Developer</p>
+        <p class="hero__desc reveal" data-bind="tagline">
+          Computer Engineering student who designs, builds, tests, and ships full-stack software.
+        </p>
 
-          <ul class="socials reveal" data-socials aria-label="Social links"></ul>
+        <div class="hero__cta reveal">
+          <a href="#projects" class="btn btn--primary btn--lg">
+            View my work
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+          <a href="assets/resume.pdf" class="btn btn--outline btn--lg" download="Peter-Paul-Ungab-Resume.pdf" data-bind-href="resume">
+            Download resume
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          </a>
         </div>
 
-        <!-- "At a glance" spec table; rows come from PORTFOLIO.glance in js/data.js -->
-        <aside class="spec reveal" aria-labelledby="specTitle">
-          <p class="table-caption" id="specTitle"><span>Table 0</span> At a glance</p>
-          <dl class="spec__rows" data-glance>
-            <div><dt>Role</dt><dd>Full-stack developer</dd></div>
-            <div><dt>Based in</dt><dd>Digos City, Philippines</dd></div>
-            <div><dt>Status</dt><dd>Open to opportunities</dd></div>
-          </dl>
-          <!-- Fallback markup; re-rendered from PORTFOLIO.stats in js/data.js -->
-          <ul class="hero__stats" data-stats aria-label="Key figures">
-            <li><span class="stat__value">5</span><span class="stat__label">Projects built</span></li>
-            <li><span class="stat__value">149</span><span class="stat__label">Automated tests written</span></li>
-            <li><span class="stat__value">22</span><span class="stat__label">Technologies</span></li>
-          </ul>
-        </aside>
+        <ul class="socials reveal" data-socials aria-label="Social links"></ul>
+
+        <!-- Fallback markup; re-rendered from PORTFOLIO.stats in js/data.js -->
+        <ul class="hero__stats glass-card reveal" data-stats aria-label="Key figures">
+          <li><span class="stat__value">5</span><span class="stat__label">Projects built</span></li>
+          <li><span class="stat__value">149</span><span class="stat__label">Automated tests written</span></li>
+          <li><span class="stat__value">22</span><span class="stat__label">Technologies</span></li>
+        </ul>
       </div>
+
+      <a href="#about" class="hero__scroll" aria-label="Scroll to About">
+        <span aria-hidden="true"></span>
+      </a>
     </section>
 
     <!-- ========== ABOUT ========== -->
     <section class="section" id="about" aria-labelledby="aboutTitle">
       <div class="container">
         <header class="section__header reveal">
-          <p class="section__eyebrow">01 · About</p>
-          <h2 class="section__title" id="aboutTitle">About</h2>
+          <p class="section__eyebrow">01 / About</p>
+          <h2 class="section__title" id="aboutTitle">About me<span class="dot" aria-hidden="true">.</span></h2>
         </header>
 
         <div class="about">
-          <figure class="figure about__photo reveal">
-            <div class="figure__frame photo-frame">
-              <!-- Replace with your photo: assets/images/profile.jpg -->
-              <img src="assets/images/profile-placeholder.svg" alt="Portrait of Peter Paul Ungab" width="480" height="560" loading="lazy" data-bind-src="photo" data-bind-alt="photoAlt" />
-            </div>
-            <figcaption class="figure__caption"><span>Fig. A</span> <span data-bind="name">Peter Paul Ungab</span></figcaption>
+          <figure class="about__photo glass-card reveal">
+            <!-- Replace with your photo: assets/images/profile.jpg (set profile.photo in js/data.js) -->
+            <img src="assets/images/profile-placeholder.svg" alt="Portrait of Peter Paul Ungab" width="480" height="560" loading="lazy" data-bind-src="photo" data-bind-alt="photoAlt" />
+            <figcaption>
+              <span class="about__photo-name" data-bind="name">Peter Paul Ungab</span>
+              <span class="about__photo-place" data-bind="location">Digos City, Philippines</span>
+            </figcaption>
           </figure>
 
-          <div class="about__content reveal">
+          <div class="about__bio glass-card reveal">
             <p class="lead">
               I'm an aspiring <strong>software engineer</strong> studying Computer Engineering, and I like software that is reliable, well-tested, and pleasant to use.
             </p>
@@ -204,10 +209,24 @@
               I'm looking for a team where I can contribute, learn from experienced engineers, and keep shipping.
             </p>
 
-            <h3 class="about__subtitle">Areas of interest</h3>
+            <h3 class="card-label about__label">Areas of interest</h3>
             <ul class="tag-list" data-interests></ul>
-
           </div>
+
+          <!-- Rows come from PORTFOLIO.glance in js/data.js -->
+          <aside class="about__glance glass-card reveal" aria-labelledby="glanceTitle">
+            <header class="about__glance-head">
+              <h3 class="card-label" id="glanceTitle">At a glance</h3>
+              <p class="pill pill--red" data-glance-status>
+                <span class="status-dot" aria-hidden="true"></span>
+                <span data-bind="availabilityShort">Open to opportunities</span>
+              </p>
+            </header>
+            <dl class="glance" data-glance>
+              <div><dt>Role</dt><dd>Full-stack developer</dd></div>
+              <div><dt>Based in</dt><dd>Digos City, Philippines</dd></div>
+            </dl>
+          </aside>
         </div>
       </div>
     </section>
@@ -216,11 +235,10 @@
     <section class="section" id="skills" aria-labelledby="skillsTitle">
       <div class="container">
         <header class="section__header reveal">
-          <p class="section__eyebrow">02 · Skills</p>
-          <h2 class="section__title" id="skillsTitle">Technical skills</h2>
+          <p class="section__eyebrow">02 / Skills</p>
+          <h2 class="section__title" id="skillsTitle">Technical skills<span class="dot" aria-hidden="true">.</span></h2>
           <p class="section__subtitle">Languages, frameworks, and tools I use to design, build, and ship software.</p>
         </header>
-        <p class="table-caption reveal"><span>Table 1</span> Technical specifications</p>
         <div class="skills" data-skills></div>
       </div>
     </section>
@@ -229,23 +247,23 @@
     <section class="section" id="projects" aria-labelledby="projectsTitle">
       <div class="container">
         <header class="section__header reveal">
-          <p class="section__eyebrow">03 · Projects</p>
-          <h2 class="section__title" id="projectsTitle">Selected projects</h2>
+          <p class="section__eyebrow">03 / Projects</p>
+          <h2 class="section__title" id="projectsTitle">Selected work<span class="dot" aria-hidden="true">.</span></h2>
           <p class="section__subtitle">Applications I designed, built, tested, and deployed — each with a live demo and source code.</p>
         </header>
-        <div class="projects-grid" data-projects></div>
+        <div class="bento" data-projects></div>
       </div>
     </section>
 
     <!-- ========== GITHUB ========== -->
     <section class="section section--tight" id="github" aria-labelledby="githubTitle">
       <div class="container">
-        <div class="github-cta reveal">
+        <div class="github-cta glass-card reveal">
           <div class="github-cta__text">
-            <h2 class="github-cta__title" id="githubTitle">More on GitHub</h2>
+            <h2 class="github-cta__title" id="githubTitle">More on GitHub<span class="dot" aria-hidden="true">.</span></h2>
             <p>Every project above is open source, with tests and commit history you can read.</p>
           </div>
-          <a href="https://github.com/PeterUngab34" class="btn btn--outline" target="_blank" rel="noopener noreferrer" data-bind-href="github">
+          <a href="https://github.com/PeterUngab34" class="btn btn--primary" target="_blank" rel="noopener noreferrer" data-bind-href="github">
             Visit my GitHub
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
           </a>
@@ -253,7 +271,7 @@
 
         <!-- Latest public repositories (auto-loaded when a GitHub username is set in js/data.js) -->
         <div class="repos" data-repos hidden>
-          <h3 class="table-caption"><span>Table 2</span> Latest repositories</h3>
+          <h3 class="card-label">Latest repositories</h3>
           <div class="repos-grid" data-repos-grid></div>
         </div>
       </div>
@@ -263,8 +281,8 @@
     <section class="section" id="experience" aria-labelledby="experienceTitle">
       <div class="container">
         <header class="section__header reveal">
-          <p class="section__eyebrow">04 · Experience</p>
-          <h2 class="section__title" id="experienceTitle">Experience</h2>
+          <p class="section__eyebrow">04 / Experience</p>
+          <h2 class="section__title" id="experienceTitle">Experience<span class="dot" aria-hidden="true">.</span></h2>
           <p class="section__subtitle">Hands-on development through academic, personal, and independent work.</p>
         </header>
         <ol class="timeline" data-experience></ol>
@@ -275,10 +293,10 @@
     <section class="section" id="education" aria-labelledby="educationTitle">
       <div class="container">
         <header class="section__header reveal">
-          <p class="section__eyebrow">05 · Education</p>
-          <h2 class="section__title" id="educationTitle">Education</h2>
+          <p class="section__eyebrow">05 / Education</p>
+          <h2 class="section__title" id="educationTitle">Education<span class="dot" aria-hidden="true">.</span></h2>
         </header>
-        <div data-education></div>
+        <div class="edu-list" data-education></div>
       </div>
     </section>
 
@@ -286,8 +304,8 @@
     <section class="section" id="certifications" aria-labelledby="certificationsTitle">
       <div class="container">
         <header class="section__header reveal">
-          <p class="section__eyebrow">06 · Certifications</p>
-          <h2 class="section__title" id="certificationsTitle">Certifications</h2>
+          <p class="section__eyebrow">06 / Certifications</p>
+          <h2 class="section__title" id="certificationsTitle">Certifications<span class="dot" aria-hidden="true">.</span></h2>
           <p class="section__subtitle">Courses and credentials that support my continuous learning.</p>
         </header>
         <div class="cert-grid" data-certifications></div>
@@ -298,8 +316,8 @@
     <section class="section" id="services" aria-labelledby="servicesTitle">
       <div class="container">
         <header class="section__header reveal">
-          <p class="section__eyebrow">07 · What I do</p>
-          <h2 class="section__title" id="servicesTitle">What I can contribute</h2>
+          <p class="section__eyebrow">07 / What I do</p>
+          <h2 class="section__title" id="servicesTitle">What I can contribute<span class="dot" aria-hidden="true">.</span></h2>
           <p class="section__subtitle">Where I can add value to a team or project.</p>
         </header>
         <div class="services-grid" data-services></div>
@@ -310,29 +328,66 @@
     <section class="section" id="contact" aria-labelledby="contactTitle">
       <div class="container">
         <header class="section__header reveal">
-          <p class="section__eyebrow">08 · Contact</p>
-          <h2 class="section__title" id="contactTitle">Get in touch</h2>
+          <p class="section__eyebrow">08 / Contact</p>
+          <h2 class="section__title" id="contactTitle">Get in touch<span class="dot" aria-hidden="true">.</span></h2>
           <p class="section__subtitle">Have an internship, a project, or a question? I read every message.</p>
         </header>
 
         <div class="contact">
-          <aside class="contact__info reveal">
-            <p class="table-caption"><span>Table 3</span> Contact details</p>
-            <dl class="spec__rows">
-              <div>
-                <dt>Email</dt>
-                <dd><a class="info-link" href="mailto:peterpaulungab00@gmail.com" data-bind="email" data-bind-href="mailto">peterpaulungab00@gmail.com</a></dd>
-              </div>
-              <div><dt>Location</dt><dd data-bind="location">Philippines</dd></div>
-              <div><dt>Availability</dt><dd data-bind="availability">Open to internships, freelance projects, and software engineering opportunities.</dd></div>
-              <div>
-                <dt>Elsewhere</dt>
-                <dd><ul class="socials" data-socials aria-label="Social links"></ul></dd>
-              </div>
-            </dl>
+          <aside class="contact__info glass-card reveal" aria-label="Contact details">
+            <ul class="info-list">
+              <li>
+                <span class="icon-tile icon-tile--sm" aria-hidden="true">
+                  <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+                </span>
+                <div>
+                  <p class="info-list__label">Email</p>
+                  <div class="info-list__row">
+                    <a class="info-link" href="mailto:peterpaulungab00@gmail.com" data-bind="email" data-bind-href="mailto">peterpaulungab00@gmail.com</a>
+                    <button class="copy-btn" type="button" data-copy="email" aria-label="Copy email address">
+                      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span class="copy-btn__tip" aria-hidden="true">Copied</span>
+                    </button>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span class="icon-tile icon-tile--sm" aria-hidden="true">
+                  <svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </span>
+                <div>
+                  <p class="info-list__label">Location</p>
+                  <p data-bind="location">Philippines</p>
+                </div>
+              </li>
+              <li>
+                <span class="icon-tile icon-tile--sm" aria-hidden="true">
+                  <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                </span>
+                <div>
+                  <p class="info-list__label">Local time</p>
+                  <!-- Live clock in profile.timeZone (js/data.js); filled in by js/main.js -->
+                  <p class="info-list__row"><span data-local-time>—</span><span class="info-list__muted" data-local-zone>GMT+8</span></p>
+                </div>
+              </li>
+              <li>
+                <span class="icon-tile icon-tile--sm" aria-hidden="true">
+                  <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2M2 13h20"/></svg>
+                </span>
+                <div>
+                  <p class="info-list__label">Availability</p>
+                  <p data-bind="availability">Open to internships, freelance projects, and software engineering opportunities.</p>
+                </div>
+              </li>
+            </ul>
+            <div class="contact__socials">
+              <p class="info-list__label">Elsewhere</p>
+              <ul class="socials" data-socials aria-label="Social links"></ul>
+            </div>
           </aside>
 
-          <form class="contact__form reveal" id="contactForm" novalidate>
+          <form class="contact__form glass-card reveal" id="contactForm" novalidate>
             <div class="form-row">
               <div class="field">
                 <label for="name">Full name</label>
@@ -369,28 +424,30 @@
     </section>
   </main>
 
-  <!-- ========== FOOTER / TITLE BLOCK ========== -->
+  <!-- ========== FOOTER ========== -->
   <footer class="footer">
     <div class="container">
-      <dl class="title-block">
-        <div class="title-block__name">
-          <dt>Title</dt>
-          <dd><span data-bind="name">Peter Paul Ungab</span> — portfolio</dd>
-        </div>
-        <div><dt>Drawn by</dt><dd data-bind="name">Peter Paul Ungab</dd></div>
-        <div><dt>Built with</dt><dd>HTML · CSS · JavaScript</dd></div>
-        <div><dt>Doc no.</dt><dd data-bind="partNumber">PPU-2028</dd></div>
-        <div><dt>Rev.</dt><dd data-rev>2026.09</dd></div>
-        <div><dt>Sheet</dt><dd>1 of 1</dd></div>
-      </dl>
-      <div class="footer__bottom">
-        <p>© <span id="year">2026</span> <span data-bind="name">Peter Paul Ungab</span></p>
+      <div class="footer__top-row">
+        <a href="#home" class="nav__logo" aria-label="Peter Paul Ungab — back to top">
+          <span class="nav__logo-mark" aria-hidden="true">
+            <svg class="icon" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>
+          </span>
+          <span class="nav__logo-text" data-wordmark>Peter <span>Ungab</span></span>
+        </a>
         <nav class="footer__nav" aria-label="Footer">
           <a href="#about">About</a>
           <a href="#projects">Projects</a>
           <a href="#experience">Experience</a>
           <a href="#contact">Contact</a>
         </nav>
+        <ul class="socials" data-socials aria-label="Social links"></ul>
+      </div>
+
+      <p class="footer__wordmark" aria-hidden="true" data-bind="name">Peter Paul Ungab</p>
+
+      <div class="footer__bottom">
+        <p>© <span id="year">2026</span> <span data-bind="name">Peter Paul Ungab</span></p>
+        <p>Built with HTML, CSS &amp; JavaScript — no frameworks, no trackers.</p>
         <a href="#home" class="footer__top">Back to top ↑</a>
       </div>
     </div>

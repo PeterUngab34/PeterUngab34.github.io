@@ -17,13 +17,12 @@ const PORTFOLIO = {
     role: "Software Engineer | Full-Stack Developer",
     tagline:
       "Computer Engineering student who designs, builds, tests, and ships full-stack software — from React interfaces to REST APIs and SQL schemas.",
-    // Shown as the document number in the hero and footer (initials + graduation year)
-    partNumber: "PPU-2028",
     email: "peterpaulungab00@gmail.com",
     location: "Digos City, Philippines",
+    timeZone: "Asia/Manila", // drives the live "Local time" in the Contact section
     availability:
       "Open to internships, freelance projects, and software engineering opportunities.",
-    availabilityShort: "Open to opportunities",
+    availabilityShort: "Open to opportunities", // hero badge + the status pill of "At a glance"
     github: "https://github.com/PeterUngab34",
     linkedin: "", // paste your LinkedIn URL here when you have one; the icon appears automatically
     resume: "assets/resume.pdf",
@@ -32,8 +31,8 @@ const PORTFOLIO = {
     photoAlt: "Monogram of Peter Paul Ungab", // change to "Portrait of …" when you add a real photo
   },
 
-  /* ---------------- Hero: "At a glance" table ----------------
-     Short label/value rows. A Status row (profile.availabilityShort) is added automatically. */
+  /* ---------------- About: "At a glance" card ----------------
+     Short label/value rows. The status pill beside the heading shows profile.availabilityShort. */
   glance: [
     { label: "Role", value: "Full-stack developer" },
     { label: "Based in", value: "Digos City, Philippines" },
@@ -67,7 +66,8 @@ const PORTFOLIO = {
 
   /* ---------------- Skills ----------------
      icon: image URL (Devicon), or null to show `badge` text instead.
-     invert: true for dark logos that need to be lightened in dark mode. */
+     invert: true for black logos, which are flipped to white on the dark background.
+     lighten: true for dark-colored logos that need a brightness boost to stay visible. */
   skills: [
     {
       category: "Programming Languages",
@@ -105,7 +105,7 @@ const PORTFOLIO = {
       category: "Database",
       icon: "database",
       items: [
-        { name: "MySQL", icon: `${ICONS}/mysql-original.svg` },
+        { name: "MySQL", icon: `${ICONS}/mysql-original.svg`, lighten: true },
         { name: "PostgreSQL", icon: `${ICONS}/postgresql-original.svg` },
         { name: "MongoDB", icon: `${ICONS}/mongodb-original.svg` },
       ],
@@ -125,10 +125,11 @@ const PORTFOLIO = {
 
   /* ---------------- Featured projects ----------------
      Replace these examples with your real projects.
-     Set github/demo to "" to hide a button. featured: true = wide card.
+     Set github/demo to "" to hide a button. Cards are laid out as a bento grid in this
+     order: wide + narrow, narrow + wide, … and an odd last card spans the full row.
      demoLabel: optional text for the demo button (e.g. "Download App").
      download: optional link for an extra "Download" button (e.g. a release page).
-     type / tests: optional rows for the project's spec table. */
+     type: optional label after the card number. tests: optional badge on the screenshot. */
   projects: [
     {
       title: "Task Management Application",
@@ -146,7 +147,6 @@ const PORTFOLIO = {
       ],
       github: "https://github.com/PeterUngab34/task-manager",
       demo: "https://PeterUngab34.github.io/task-manager",
-      featured: true,
     },
     {
       title: "E-Commerce Website",
@@ -205,13 +205,13 @@ const PORTFOLIO = {
       type: "Static site · no dependencies",
       image: "assets/projects/portfolio.webp",
       description:
-        "This site — a datasheet-style portfolio with no frameworks, no build step, and no third-party requests.",
+        "This site — a dark, glass-and-red portfolio with no frameworks, no build step, and no third-party requests.",
       tech: ["HTML", "CSS", "JavaScript"],
       features: [
         "Strict Content-Security-Policy with self-hosted fonts and icons",
         "Every section rendered from one editable data file",
-        "Paper and graphite themes that follow the system setting",
-        "Accessible markup, print stylesheet, and no-JavaScript fallback",
+        "Starfield, film grain, pointer spotlight, and glass cards in plain CSS — no libraries",
+        "Accessible markup, reduced-motion support, and no-JavaScript fallback",
       ],
       github: "https://github.com/PeterUngab34/PeterUngab34.github.io",
       demo: "https://peterungab34.github.io/",
@@ -323,7 +323,7 @@ const PORTFOLIO = {
   ],
 
   /* ---------------- Hero stats ----------------
-     Short, honest numbers shown under the hero intro (counted up on load). */
+     Short, honest numbers shown in the glass strip under the hero (counted up on load). */
   stats: [
     { value: 5, label: "Projects built" },
     { value: 149, label: "Automated tests written" },

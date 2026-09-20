@@ -1,10 +1,10 @@
-The fonts in this folder are Latin-subset WOFF2 builds, self-hosted unmodified from Google Fonts.
+The fonts in this folder are Latin-subset variable WOFF2 builds, self-hosted unmodified.
 Both families are licensed under the SIL Open Font License, Version 1.1 (https://openfontlicense.org).
 
-  plex-sans-latin.woff2       IBM Plex Sans (variable: weight 100-700, width 85-100)
-  plex-mono-400-latin.woff2   IBM Plex Mono Regular
-  plex-mono-500-latin.woff2   IBM Plex Mono Medium
-                              Copyright 2017 IBM Corp. — https://github.com/IBM/plex
+  manrope-latin.woff2   Manrope (variable: weight 200-800), via Fontsource
+                        Copyright 2018 The Manrope Project Authors - https://github.com/sharanda/manrope
+  inter-latin.woff2     Inter (variable: weight 100-900), via Fontsource
+                        Copyright 2016 The Inter Project Authors - https://github.com/rsms/inter
 
 The skill icons in ../icons are from Devicon (https://devicon.dev), MIT License.
 Logos remain trademarks of their respective owners.
